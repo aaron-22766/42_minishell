@@ -6,7 +6,7 @@
 #    By: arabenst <arabenst@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/14 17:40:26 by arabenst          #+#    #+#              #
-#    Updated: 2023/05/17 16:03:53 by arabenst         ###   ########.fr        #
+#    Updated: 2023/05/23 17:52:44 by arabenst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ OBJS		=	$(addprefix $(OBJDIR)/,$(notdir $(SRCS:.c=.o)))
 
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
-LDFLAGS		=	
+LDFLAGS		=	-lreadline -L $(HOME)/.brew/opt/readline/lib
+INCFLAGS	=	-I $(HOME)/.brew/opt/readline/include
 
 RM			=	rm
 RMFLAGS		=	-rf
@@ -35,10 +36,10 @@ LIBFT_LIB	=	libft.a
 LIBFT		=	$(LIBFT_DIR)/$(LIBFT_LIB)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCFLAGS)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
