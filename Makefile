@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: arabenst <arabenst@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/10/14 17:40:26 by arabenst          #+#    #+#              #
-#    Updated: 2023/05/23 17:52:44 by arabenst         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME		=	minishell
 
 SRCDIR		=	./src
@@ -55,6 +43,11 @@ clean:
 fclean: clean
 	$(RM) $(RMFLAGS) $(NAME)
 
+libclean:
+	$(RM) $(RMFLAGS) $(LIBFT_DIR)
+
+allclean: fclean libclean
+
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libclean allclean

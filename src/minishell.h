@@ -50,21 +50,25 @@ typedef struct s_cmds
 	struct s_cmds	*next;
 }	t_cmds;
 
-typedef struct s_minishell
-{
-	bool		verbose;
-	t_cmds		*commands;
-}	t_minishell;
-
 /* ************************************************************************** */
 /*                              GLOBAL VARIABLE                               */
 /* ************************************************************************** */
 
-t_minishell	g_data;
+bool	verbose;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
+
+// minishell.c
+
+// env.c
+bool	ft_is_env_var(const char *var1, const char *var2, size_t name_len);
+int		ft_setenv(const char *name, const char *value, int overwrite);
+int		ft_putenv(char *string);
+int		ft_unsetenv(const char *name);
+void	ft_print_environ(void);
+void	ft_free_environ(void);
 
 // init_shell.c
 void	ft_init_shell(void);
@@ -73,7 +77,7 @@ void	ft_init_shell(void);
 void	ft_run_shell(void);
 
 // free.c
-void	ft_free(void);
+void	ft_free_commands(t_cmds *commands);
 
 // error.c
 void	ft_perror(int err);

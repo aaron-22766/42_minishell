@@ -1,18 +1,13 @@
 #include "minishell.h"
 
-static void	ft_free_commands(void)
+void	ft_free_commands(t_cmds *commands)
 {
 	t_cmds	*next;
 
-	while (g_data.commands)
+	while (commands)
 	{
-		next = g_data.commands->next;
-		free(g_data.commands);
-		g_data.commands = next;
+		next = commands->next;
+		free(commands);
+		commands = next;
 	}
-}
-
-void	ft_free(void)
-{
-	ft_free_commands();
 }

@@ -1,55 +1,42 @@
 #include "minishell.h"
 
-void	ft_init_data(void)
+static void	ft_sighandler(int sig)
 {
-	g_data.verbose = false;
-	g_data.commands = NULL;
+	(void)sig;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	// kill current child execution
 }
 
-void	ft_set_verbose(int argc, char **argv)
+static void	ft_set_verbose(int argc, char **argv)
 {
 	int	i;
 
+	verbose = false;
 	i = 0;
 	while (++i < argc)
 		if (!ft_strcmp(argv[i], "-v") || !ft_strcmp(argv[i], "--verbose"))
-			g_data.verbose = true;
+			verbose = true;
 }
 
-static void	ft_sighandler(int sig, siginfo_t *info, void *context)
+static void	ft_configure_terminal(void)
 {
-	(void)info;
-	(void)context;
-	if (sig != SIGINT)
-		return ;
-	// ctrl-c = SIGINT -> display new prompt on new line
-	// ctrl-\ = SIGQUIT -> ignored
-}
+	struct termios	new_term;
 
-static bool	ft_handle_signal(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_sigaction = ft_sighandler;
-	if (sigaction(SIGINT, &sa, NULL) == -1
-		|| sigaction(SIGQUIT, &sa, NULL) == -1)
-		return (printf("\nERROR!\nFailed to set up signal handler\n\n"),
-			RETURN_FAILURE);
-	if (g_data.verbose)
-		printf("Signals set up successfully.\n");
-	return (RETURN_SUCCESS);
+	tcgetattr(STDIN_FILENO, &new_term);
+	new_term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 }
 
 int	main(int argc, char **argv)
 {
-	ft_init_data();
+	signal(SIGINT, &ft_sighandler);
+	signal(SIGQUIT, SIG_IGN);
 	ft_set_verbose(argc, argv);
-	if (ft_handle_signal() == RETURN_SUCCESS)
-	{
-		ft_init_shell();
-		ft_run_shell();
-	}
+	ft_init_shell();
+	ft_configure_terminal();
+	ft_run_shell();
 	return (-1);
 }
