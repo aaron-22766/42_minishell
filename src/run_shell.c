@@ -27,15 +27,18 @@ void	ft_run_shell(void)
 			line = ft_strdup("exit");
 		if (!ft_strcmp(line, "exit"))
 		{
-			// remove this if when exit builtin can be run instead
-			printf("\n");
+			// remove this if block when exit builtin can be run instead
 			free(line);
+			ft_free_environ();
 			exit(EXIT_SUCCESS);
 		}
 		if (line[0])
 			add_history(line);
 		// execute(evaluate(parse(lex(line))));
-		system(line);
+		if (!ft_strcmp(line, "env")) // remove this if block when env builtin can be run instead
+			ft_print_environ();
+		else
+			system(line);
 		free(line);
 	}
 }
