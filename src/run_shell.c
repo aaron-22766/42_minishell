@@ -25,9 +25,8 @@ void	ft_run_shell(void)
 		line = readline("minishell> ");
 		if (!line)
 			line = ft_strdup("exit");
-		if (!ft_strcmp(line, "exit"))
+		if (!ft_strcmp(line, "exit"))// remove when exit builtin
 		{
-			// remove this if block when exit builtin can be run instead
 			free(line);
 			ft_free_environ();
 			exit(EXIT_SUCCESS);
@@ -35,7 +34,7 @@ void	ft_run_shell(void)
 		if (line[0])
 			add_history(line);
 		// execute(evaluate(parse(lex(line))));
-		if (!ft_strcmp(line, "env")) // remove this if block when env builtin can be run instead
+		if (!ft_strcmp(line, "env")) // remove when env builtin
 			ft_print_environ();
 		else
 			system(line);
