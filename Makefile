@@ -2,11 +2,12 @@ NAME		=	minishell
 
 INCDIR		=	./include/minishell
 SRCDIR		=	./src
-SUBDIRS		=	minishell lexer parser evaluator executor
+SUBDIRNAMES	=	minishell lexer parser evaluator executor
+SUBDIRS		=	$(foreach name, $(SUBDIRNAMES), $(SRCDIR)/$(name))
 OBJDIR		=	./obj
 
 INCS		=	$(wildcard *.h $(INCDIR))
-SRCS		=	$(wildcard *.c $(foreach fd, $(SRCDIR)/$(SUBDIRS), $(fd)/*.c))
+SRCS		=	$(wildcard *.c $(foreach dir, $(SUBDIRS), $(dir)/*.c))
 OBJS		=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
 
 # **************************************************************************** #
