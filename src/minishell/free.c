@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../include/minishell/minishell.h"
 
 void	ft_free_commands(t_cmds *commands)
 {

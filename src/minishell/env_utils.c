@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../include/minishell/minishell.h"
 
 size_t	ft_environ_size(void)
 {

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../include/minishell/minishell.h"
 
 static void	ft_sighandler(int sig)
 {

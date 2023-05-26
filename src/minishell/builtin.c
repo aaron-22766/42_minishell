@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../include/minishell/minishell.h"
 
 /*void	ft_builtin(t_cmds *command)
 {

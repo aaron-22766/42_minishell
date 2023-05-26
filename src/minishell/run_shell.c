@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../include/minishell/minishell.h"
 
 static void	ft_welcome_shell(void)
 {
