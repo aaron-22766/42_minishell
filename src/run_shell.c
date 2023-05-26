@@ -15,6 +15,38 @@ static void	ft_welcome_shell(void)
 	printf("current user is: \033[1;32m@%s\033[0m\n\n", user);
 }
 
+// remove dumb_builtins function when builtins can be used
+void	dumb_builtins(char *line)
+{
+	char	**args;
+	int		i;
+
+	if (!ft_strcmp(line, "exit"))
+	{
+		free(line);
+		ft_free_environ();
+		exit(EXIT_SUCCESS);
+	}
+	else if (!ft_strcmp(line, "env"))
+		ft_print_environ();
+	else
+	{
+		args = ft_split(line, ' ');
+		if (!ft_strcmp(args[0], "export"))
+			ft_putenv(args[1]);
+		else if (!ft_strcmp(args[0], "unset"))
+			ft_unsetenv(args[1]);
+		else if (!ft_strcmp(args[0], "getenv"))
+			printf("%s\n", getenv(args[1]));
+		else
+			system(line);
+		i = -1;
+		while (args[++i])
+			free(args[i]);
+		free(args);
+	}
+}
+
 void	ft_run_shell(void)
 {
 	char	*line;
@@ -25,19 +57,10 @@ void	ft_run_shell(void)
 		line = readline("minishell> ");
 		if (!line)
 			line = ft_strdup("exit");
-		if (!ft_strcmp(line, "exit"))// remove when exit builtin
-		{
-			free(line);
-			ft_free_environ();
-			exit(EXIT_SUCCESS);
-		}
 		if (line[0])
 			add_history(line);
+		dumb_builtins(line);
 		// execute(evaluate(parse(lex(line))));
-		if (!ft_strcmp(line, "env")) // remove when env builtin
-			ft_print_environ();
-		else
-			system(line);
 		free(line);
 	}
 }
