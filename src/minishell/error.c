@@ -1,12 +1,14 @@
 #include "../../include/minishell/minishell.h"
 
-static void	ft_puterror(const char *fault)
-{
-	ft_printf("minishell: %s\n", fault);
-}
+// static void	ft_puterror(const char *fault)
+// {
+	
+// }
 
-void	ft_perror(int err)
+void	ft_perror(int err, char *context)
 {
+	if (err)
+		ft_printf("minishell: ");
 	if (err == ERR_MEM)
-		ft_puterror("Memory allocation failed!");
+		ft_printf("memory allocation failed while %s\n", context);
 }

@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../../libft/libft.h"
+# include "lexer.h"
 
 /* ************************************************************************** */
 /*                                  DEFINES                                   */
@@ -85,6 +86,6 @@ void	ft_free_environ(void);
 void	ft_free_commands(t_cmds *commands);
 
 // error.c
-void	ft_perror(int err);
+void	ft_perror(int err, char *context);
 
 #endif

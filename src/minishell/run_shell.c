@@ -25,6 +25,7 @@ void	dumb_builtins(char *line)
 	{
 		free(line);
 		ft_free_environ();
+		// system("leaks minishell");
 		exit(EXIT_SUCCESS);
 	}
 	else if (!ft_strcmp(line, "env"))
@@ -32,16 +33,16 @@ void	dumb_builtins(char *line)
 	else
 	{
 		args = ft_split(line, ' ');
-		if (!ft_strcmp(args[0], "export"))
+		if (args && args[0] && !ft_strcmp(args[0], "export"))
 			ft_putenv(args[1]);
-		else if (!ft_strcmp(args[0], "unset"))
+		else if (args && args[0] && !ft_strcmp(args[0], "unset"))
 			ft_unsetenv(args[1]);
-		else if (!ft_strcmp(args[0], "getenv"))
+		else if (args && args[0] && !ft_strcmp(args[0], "getenv"))
 			printf("%s\n", getenv(args[1]));
-		else
-			system(line);
+		// else
+		// 	system(line);
 		i = -1;
-		while (args[++i])
+		while (args && args[++i])
 			free(args[i]);
 		free(args);
 	}
@@ -59,10 +60,11 @@ void	ft_run_shell(void)
 			line = ft_strdup("exit");
 		if (line[0])
 		{
-			dumb_builtins(line);
-			// execute(evaluate(parse(lex(line))));
 			add_history(line);
+			dumb_builtins(line);
+			ft_lex(line);
+			// execute(evaluate(parse(lex(line))));
 		}
-		free(line);
+		// ft_free_commands(commands);
 	}
 }

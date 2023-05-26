@@ -6,9 +6,9 @@ SUBDIRNAMES	=	minishell lexer parser evaluator executor
 SUBDIRS		=	$(foreach name, $(SUBDIRNAMES), $(SRCDIR)/$(name))
 OBJDIR		=	./obj
 
-INCS		=	$(wildcard *.h $(INCDIR))
-SRCS		=	$(wildcard *.c $(foreach dir, $(SUBDIRS), $(dir)/*.c))
-OBJS		=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
+INCS		=	$(wildcard $(INCDIR)/*.h)
+SRCS		=	$(foreach dir, $(SUBDIRS), $(wildcard $(dir)/*.c))
+OBJS		=	$(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 
 # **************************************************************************** #
 #                               REMOVE WILDCARD                                #
