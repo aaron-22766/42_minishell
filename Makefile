@@ -1,10 +1,13 @@
 NAME		=	minishell
 
+INCDIR		=	./include/minishell
 SRCDIR		=	./src
+SUBDIRS		=	minishell lexer parser evaluator executor
 OBJDIR		=	./obj
 
-SRCS		=	$(wildcard $(SRCDIR)/*.c)
-OBJS		=	$(addprefix $(OBJDIR)/,$(notdir $(SRCS:.c=.o)))
+INCS		=	$(wildcard *.h $(INCDIR))
+SRCS		=	$(wildcard *.c $(foreach fd, $(SRCDIR)/$(SUBDIRS), $(fd)/*.c))
+OBJS		=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
 
 # **************************************************************************** #
 #                               REMOVE WILDCARD                                #
@@ -13,7 +16,7 @@ OBJS		=	$(addprefix $(OBJDIR)/,$(notdir $(SRCS:.c=.o)))
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
 LDFLAGS		=	-lreadline -L $(HOME)/.brew/opt/readline/lib
-INCFLAGS	=	-I $(HOME)/.brew/opt/readline/include
+INCFLAGS	=	-I $(HOME)/.brew/opt/readline/include -I $(INCDIR)
 
 RM			=	rm
 RMFLAGS		=	-rf
@@ -26,11 +29,9 @@ LIBFT		=	$(LIBFT_DIR)/$(LIBFT_LIB)
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJDIR)/%.o: %.c $(INCS)
+	mkdir -p $(@D)
 	$(CC) -c -o $@ $< $(CFLAGS) $(INCFLAGS)
-
-$(OBJDIR):
-	mkdir -p $(OBJDIR)
 
 $(LIBFT):
 	git clone $(LIBFT_GIT) $(LIBFT_DIR); make -C $(LIBFT_DIR)

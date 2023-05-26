@@ -58,9 +58,11 @@ void	ft_run_shell(void)
 		if (!line)
 			line = ft_strdup("exit");
 		if (line[0])
+		{
+			dumb_builtins(line);
+			// execute(evaluate(parse(lex(line))));
 			add_history(line);
-		dumb_builtins(line);
-		// execute(evaluate(parse(lex(line))));
+		}
 		free(line);
 	}
 }
