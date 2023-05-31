@@ -1,49 +1,67 @@
 #include "../../include/minishell/lexer.h"
 
-t_tokens	*ft_new_token(char *content)
+static char	*ft_get_next_token(char *str)
 {
-	t_tokens	*new;
+	static char	*cache;
+	char		*tok;
 
-	new = malloc(sizeof(t_tokens));
-	if (!new)
-		return (ft_perror(ERR_MEM, "creating token"), NULL);
-	new->type = INVALID;
-	new->content = content;
-	new->next = NULL;
-	return (new);
+	if (str)
+		cache = str;
+	while (cache && *cache && ft_strchr(" \n\t\r\v\f", *cache))
+		cache++;
+	if (!cache || !*cache)
+		return (NULL);
+	tok = cache;
+	cache = &cache[ft_unquoted_char(cache, " \n\t\r\v\f", "\'\"")];
+	if (*cache)
+		*cache++ = '\0';
+	return (tok);
 }
 
-t_tokens	*ft_evaluate_tokens(t_tokens *tokens)
+static t_tokens	*ft_get_tokens(char *line)
 {
-	print_tokens(tokens);
-	ft_free_tokens(tokens);
-	return (NULL);
+	t_tokens	*tokens;
+	t_tokens	*last;
+	char		*tok;
+
+	tok = ft_get_next_token(line);
+	if (!tok)
+		return (NULL);
+	tokens = ft_new_token(ft_strdup(tok));
+	if (!tokens)
+		return (NULL);
+	last = tokens;
+	while (true)
+	{
+		tok = ft_get_next_token(NULL);
+		if (!tok)
+			break ;
+		last->next = ft_new_token(ft_strdup(tok));
+		last = last->next;
+		if (!last)
+			return (ft_free_tokens(tokens), NULL);
+	}
+	return (tokens);
 }
 
 t_tokens	*ft_lex(char *line)
 {
 	t_tokens	*tokens;
-	t_tokens	*last;
-	char		**raw_tokens;
-	size_t		i;
+	char		*err_context;
 
-	raw_tokens = ft_split(line, ' '); // dont split "     " !!! -> strtok
+	tokens = ft_get_tokens(line);
 	free(line);
-	if (!raw_tokens)
-		return (ft_perror(ERR_MEM, "splitting the line"), NULL);
-	if (!raw_tokens[0])
-		return (free(raw_tokens), NULL);
-	tokens = ft_new_token(raw_tokens[0]);
-	if (!tokens)
-		return (ft_free_2d_array((void **)raw_tokens), NULL);
-	last = tokens;
-	i = 0;
-	while (raw_tokens && raw_tokens[++i])
+	if (!tokens || ft_split_at_operators(tokens) == RETURN_FAILURE)
+		return (ft_free_tokens(tokens), NULL);
+	ft_evaluate_tokens(tokens);
+	err_context = ft_check_syntax(tokens);
+	if (err_context)
+		return (ft_perror(ERR_TOKEN_SYNTAX, err_context),
+			ft_free_tokens(tokens), NULL);
+	if (verbose)
 	{
-		last->next = ft_new_token(raw_tokens[i]);
-		last = last->next;
-		if (!last)
-			return (ft_free_tokens(tokens), NULL);
+		printf("\033[1;33mTOKENS\033[0m\n");
+		print_tokens(tokens);
 	}
-	return (free(raw_tokens), ft_evaluate_tokens(tokens));
+	return (tokens);
 }
