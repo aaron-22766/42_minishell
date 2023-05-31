@@ -14,11 +14,14 @@ static void	ft_allocate_environ(void)
 			new[i] = ft_strdup(environ[i]);
 	}
 	environ = new;
-	if (verbose)
-		ft_print_environ();
 }
 
 void	ft_init_shell(void)
 {
 	ft_allocate_environ();
+	if (verbose)
+	{
+		printf("\033[1;33mENVIRONMENT\033[0m\n");
+		ft_print_environ();
+	}
 }

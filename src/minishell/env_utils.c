@@ -11,7 +11,7 @@ size_t	ft_environ_size(void)
 	return (size);
 }
 
-bool	ft_is_env_var(const char *var1, const char *var2, size_t name_len)
+char	ft_is_env_var(const char *var1, const char *var2, size_t name_len)
 {
 	if (!var1 || name_len < 1 || ft_strlen(var1) < name_len + 2)
 		return (false);

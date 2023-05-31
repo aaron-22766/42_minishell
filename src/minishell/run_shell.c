@@ -62,7 +62,7 @@ void	ft_run_shell(void)
 		{
 			add_history(line);
 			dumb_builtins(line);
-			ft_lex(line);
+			ft_free_tokens(ft_lex(line));
 			// execute(evaluate(parse(lex(line))));
 		}
 		// ft_free_commands(commands);

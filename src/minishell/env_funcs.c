@@ -1,6 +1,6 @@
 #include "../../include/minishell/minishell.h"
 
-static bool	ft_env_size_increment(void)
+static char	ft_env_size_increment(void)
 {
 	extern char	**environ;
 	char		**new;
