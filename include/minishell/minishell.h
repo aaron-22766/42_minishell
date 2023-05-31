@@ -31,11 +31,16 @@
 /*                                   ENUMS                                    */
 /* ************************************************************************** */
 
-enum e_errors
+enum e_return
 {
 	RETURN_SUCCESS,
-	RETURN_FAILURE,
-	ERR_MEM
+	RETURN_FAILURE
+};
+
+enum e_errors
+{
+	ERR_MEM,
+	ERR_TOKEN_SYNTAX
 };
 
 /* ************************************************************************** */
@@ -77,7 +82,7 @@ int		ft_unsetenv(const char *name);
 
 // env_utils.c
 size_t	ft_environ_size(void);
-bool	ft_is_env_var(const char *var1, const char *var2, size_t name_len);
+char	ft_is_env_var(const char *var1, const char *var2, size_t name_len);
 int		ft_existing_env_var(const char *var, size_t name_len);
 void	ft_print_environ(void);
 void	ft_free_environ(void);
@@ -87,5 +92,6 @@ void	ft_free_commands(t_cmds *commands);
 
 // error.c
 void	ft_perror(int err, char *context);
+void	ft_perror_exe(char *exe, int err, char *context);
 
 #endif
