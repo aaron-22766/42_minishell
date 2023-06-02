@@ -21,7 +21,7 @@ char	ft_expand_tokens(t_tokens *tokens)
 				return (RETURN_FAILURE);
 			else if (ret == RMV || ft_expand_tilde(&tokens->content) == RMV)
 			{
-				prev->next = token->next;
+				prev->next = tokens->next;
 				free(tokens->content);
 				free(tokens);
 				tokens = prev;

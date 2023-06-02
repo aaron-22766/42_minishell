@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../../libft/libft.h"
+# include "global.h"
 # include "lexer.h"
 # include "parser.h"
 
@@ -29,33 +30,8 @@
 /* ************************************************************************** */
 
 /* ************************************************************************** */
-/*                                   ENUMS                                    */
-/* ************************************************************************** */
-
-enum e_return
-{
-	RETURN_SUCCESS,
-	RETURN_FAILURE
-};
-
-enum e_errors
-{
-	ERR_ERRNO,
-	ERR_MEM,
-	ERR_TOKEN_SYNTAX,
-	ERR_AMBIG_RED
-};
-
-/* ************************************************************************** */
 /*                                  STRUCTS                                   */
 /* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                              GLOBAL VARIABLE                               */
-/* ************************************************************************** */
-
-bool	verbose;
-// pid_t	g_child_pid;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
@@ -83,10 +59,5 @@ void	ft_free_environ(void);
 
 // free.c
 void	ft_free_commands(t_cmds *commands);
-
-// error.c
-void	ft_perror(int err, char *context);
-void	ft_perror_builtin(char *builtin, int err, char *context);
-void	ft_perror_exe(char *exe, int err, char *context);
 
 #endif

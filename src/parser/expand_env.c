@@ -24,17 +24,17 @@ static char	ft_replace_var(char id, char **content, size_t start, size_t len)
 	char	*val;
 	char	temp;
 
-	temp = content[start + len];
-	content[start + len] = '\0';
-	val = getenv(&content[start + 1]);
+	temp = (*content)[start + len];
+	(*content)[start + len] = '\0';
+	val = getenv(&(*content)[start + 1]);
 	if (start == 0 && len == ft_strlen(*content) && !val)
 	{
 		if (id == FILE_NAME)
-			return (ft_perror(ERR_AMBIG_RED, content), RETURN_FAILURE);
+			return (ft_perror(ERR_AMBIG_RED, *content), RETURN_FAILURE);
 		return (RMV);
 	}
-	content[start + len] = temp;
-	if (content[start + 1] == '?')
+	(*content)[start + len] = temp;
+	if ((*content)[start + 1] == '?')
 	{
 		val = ft_itoa(-42);
 		if (val)
@@ -48,7 +48,6 @@ static char	ft_replace_var(char id, char **content, size_t start, size_t len)
 
 char	ft_expand_env_vars(char **content, char id)
 {
-	char	*val;
 	size_t	start;
 	size_t	len;
 	char	ret;
@@ -58,12 +57,12 @@ char	ft_expand_env_vars(char **content, char id)
 	{
 		len = 1;
 		if ((*content)[start + len] == '?')
-			ret = ft_replace_var(id, *content, start, len + 1);
+			ret = ft_replace_var(id, content, start, len + 1);
 		else if (ft_isalpha((*content)[start + len]))
 		{
 			while (ft_isalnum((*content)[start + len]))
 				len++;
-			ret = ft_replace_var(id, *content, start, len);
+			ret = ft_replace_var(id, content, start, len);
 		}
 		if (ret != RETURN_SUCCESS)
 			return (ret);
