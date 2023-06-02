@@ -2,7 +2,9 @@
 
 static void	ft_print_error(int err, char *context)
 {
-	if (err == ERR_MEM)
+	if (err == ERR_ERRNO)
+		perror(context);
+	else if (err == ERR_MEM)
 		ft_eprintf("memory allocation failed while %s", context);
 	else if (err == ERR_TOKEN_SYNTAX)
 		ft_eprintf("syntax error near unexpected token `%s'", context);

@@ -39,6 +39,7 @@ enum e_return
 
 enum e_errors
 {
+	ERR_ERRNO,
 	ERR_MEM,
 	ERR_TOKEN_SYNTAX
 };
