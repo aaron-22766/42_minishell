@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include "../../libft/libft.h"
 # include "lexer.h"
+# include "parser.h"
 
 /* ************************************************************************** */
 /*                                  DEFINES                                   */
@@ -41,21 +42,13 @@ enum e_errors
 {
 	ERR_ERRNO,
 	ERR_MEM,
-	ERR_TOKEN_SYNTAX
+	ERR_TOKEN_SYNTAX,
+	ERR_AMBIG_RED
 };
 
 /* ************************************************************************** */
 /*                                  STRUCTS                                   */
 /* ************************************************************************** */
-
-typedef struct s_cmds
-{
-	char			*path;
-	char			**argv;
-	int				in_fd;
-	int				out_fd;
-	struct s_cmds	*next;
-}	t_cmds;
 
 /* ************************************************************************** */
 /*                              GLOBAL VARIABLE                               */
@@ -93,6 +86,7 @@ void	ft_free_commands(t_cmds *commands);
 
 // error.c
 void	ft_perror(int err, char *context);
+void	ft_perror_builtin(char *builtin, int err, char *context);
 void	ft_perror_exe(char *exe, int err, char *context);
 
 #endif
