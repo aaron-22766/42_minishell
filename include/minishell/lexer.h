@@ -5,8 +5,6 @@
 /*                                  INCLUDES                                  */
 /* ************************************************************************** */
 
-# include <stdio.h>
-# include "../../libft/libft.h"
 # include "global.h"
 
 /* ************************************************************************** */
@@ -53,10 +51,10 @@ t_tokens	*ft_lex(char *line);
 char		ft_split_at_operators(t_tokens *token);
 
 // evaluate.c
-void		ft_evaluate_tokens(t_tokens *tokens);
+char		ft_evaluate_tokens(t_tokens *tokens);
 
 // check.c
-char		*ft_check_syntax(t_tokens *tokens);
+// char		*ft_check_syntax(t_tokens *tokens);
 
 // utils.c
 t_tokens	*ft_new_token(char *content);

@@ -51,6 +51,7 @@ size_t	ft_unquoted_char(char *str, const char *chars, const char *quotes)
 // remove on final
 t_tokens	*print_tokens(t_tokens *tokens)
 {
+	printf("\033[1;33mTOKENS\033[0m\n");
 	if (!tokens)
 		printf("No tokens\n");
 	while (tokens)

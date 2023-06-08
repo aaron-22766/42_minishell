@@ -18,30 +18,71 @@ static void	ft_evaluate_operators(t_tokens *tokens)
 	}
 }
 
-static void	ft_evaluate_words(t_tokens *tokens)
+static char	*ft_evaluate_words(t_tokens *tokens)
 {
-	if (tokens->id & WORD)
-		tokens->id = COMMAND;
-	while (tokens && tokens->next)
+	t_tokens	*temp;
+
+	temp = tokens;
+	while (temp && temp->next)
 	{
-		if (tokens->id & WORD && tokens->id != WORD)
-			tokens = tokens->next;
-		while (tokens && tokens->next && tokens->next->id & OPERATOR)
-			tokens = tokens->next;
-		if (!tokens || !tokens->next)
-			return ;
-		if (tokens->id == I_RED || tokens->id == O_RED || tokens->id == O_RED_A)
-			tokens->next->id = FILE_NAME;
-		else if (tokens->id == HEREDOC)
-			tokens->next->id = HEREDOC_EOF;
-		else if (tokens->id == PIPE)
-			tokens->next->id = COMMAND;
-		tokens = tokens->next;
+		if (temp->id & OPERATOR && temp->id != PIPE
+			&& temp->next->id & OPERATOR)
+			return (temp->next->content);
+		if (temp->id == I_RED || temp->id == O_RED || temp->id == O_RED_A)
+			temp->next->id = FILE_NAME;
+		else if (temp->id == HEREDOC)
+			temp->next->id = HEREDOC_EOF;
+		temp = temp->next;
 	}
+	while (tokens)
+	{
+		while (tokens && tokens->id != WORD)
+			tokens = tokens->next;
+		if (!tokens)
+			return (NULL);
+		tokens->id = COMMAND;
+		while (tokens && tokens->id != PIPE)
+			tokens = tokens->next;
+	}
+	return (NULL);
 }
 
-void	ft_evaluate_tokens(t_tokens *tokens)
+static char	*ft_check_syntax(t_tokens *tokens)
 {
+	size_t	i;
+	char	quote;
+
+	if (tokens->id == PIPE)
+		return (tokens->content);
+	while (tokens->next)
+		tokens = tokens->next;
+	if (tokens->id & OPERATOR)
+		return ("newline");
+	quote = 0;
+	i = 0;
+	while (tokens->content[i])
+	{
+		if (!quote && ft_strchr("\'\"", tokens->content[i]))
+			quote = tokens->content[i];
+		else if (tokens->content[i] == quote)
+			quote = 0;
+		i++;
+	}
+	if (quote)
+		return (tokens->content);
+	return (NULL);
+}
+
+char	ft_evaluate_tokens(t_tokens *tokens)
+{
+	char	*err_context;
+
 	ft_evaluate_operators(tokens);
-	ft_evaluate_words(tokens);
+	err_context = ft_evaluate_words(tokens);
+	if (err_context)
+		return (ft_perror(ERR_TOKEN_SYNTAX, err_context), RETURN_FAILURE);
+	err_context = ft_check_syntax(tokens);
+	if (err_context)
+		return (ft_perror(ERR_TOKEN_SYNTAX, err_context), RETURN_FAILURE);
+	return (RETURN_SUCCESS);
 }
