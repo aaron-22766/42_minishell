@@ -1,16 +1,43 @@
 #include "../../include/minishell/parser.h"
 
+static void	ft_remove_quotes(t_tokens *tokens)
+{
+	size_t	i;
+	char	quote;
+
+	while (tokens)
+	{
+		quote = 0;
+		i = -1;
+		while (tokens->content[++i])
+		{
+			if (!quote && ft_strchr("\'\"", tokens->content[i]))
+				quote = tokens->content[i];
+			else if (tokens->content[i] == quote)
+				quote = 0;
+			else
+				continue ;
+			ft_strcpy(&tokens->content[i], &tokens->content[i + 1]);
+			i--;
+		}
+		tokens = tokens->next;
+	}
+}
+
 t_cmds	*ft_parse(t_tokens *tokens)
 {
-	if (!tokens)
-		return (NULL);
-	if (ft_expand_tokens(tokens) == RETURN_FAILURE)
-		return (ft_free_tokens(tokens), NULL);
+	t_cmds	*commands;
+
 	if (verbose)
-	{
-		printf("\033[1;33mTOKENS\033[0m\n");
 		print_tokens(tokens);
-	}
-	ft_free_tokens(tokens);
-	return (NULL);
+	if (!tokens || ft_expand_tokens(&tokens) == RETURN_FAILURE || !tokens)
+		return (ft_free_tokens(tokens), NULL);
+	ft_evaluate_commands(tokens);
+	ft_remove_quotes(tokens);
+	if (verbose)
+		print_tokens(tokens);
+	commands = ft_create_commands(tokens);
+	if (!commands)
+		return (ft_free_tokens(tokens), NULL);
+	return (commands);
 }

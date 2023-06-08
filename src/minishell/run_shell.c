@@ -50,6 +50,7 @@ void	dumb_builtins(char *line)
 
 void	ft_run_shell(void)
 {
+	t_cmds	*commands;
 	char	*line;
 
 	ft_welcome_shell();
@@ -62,9 +63,11 @@ void	ft_run_shell(void)
 		{
 			add_history(line);
 			dumb_builtins(line);
-			ft_parse(ft_lex(line));
+			commands = ft_parse(ft_lex(line));
+			if (verbose)
+				print_cmds(commands);
+			ft_free_cmds(commands);
 			// execute(evaluate(parse(lex(line))));
 		}
-		// ft_free_commands(commands);
 	}
 }

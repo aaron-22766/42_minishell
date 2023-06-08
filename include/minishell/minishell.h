@@ -5,22 +5,6 @@
 /*                                  INCLUDES                                  */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <stdbool.h>
-# include <string.h>
-# include <signal.h>
-# include <fcntl.h>
-# include <dirent.h>
-# include <termios.h>
-# include <curses.h>
-# include <term.h>
-# include <sys/stat.h>
-# include <sys/ioctl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "../../libft/libft.h"
 # include "global.h"
 # include "lexer.h"
 # include "parser.h"
@@ -40,7 +24,7 @@
 // minishell.c
 
 // init_shell.c
-void	ft_init_shell(void);
+void	ft_init_shell(char *ms_path);
 
 // run_shell.c
 void	ft_run_shell(void);
