@@ -32,7 +32,7 @@ static void	ft_expand_assignment_tilde(char **content)
 	size_t	i;
 
 	i = 0;
-	while (ft_isalnum((*content)[i]))
+	while (ft_isalnum((*content)[i]) || (*content)[i] == '_')
 		i++;
 	if (i && (*content)[i] == '=')
 		ft_expand_tilde(content, i + 1);
@@ -76,9 +76,10 @@ static char	ft_expand_env_vars(char **content, char id)
 	{
 		len = 1;
 		ret = RETURN_SUCCESS;
-		if (ft_isalpha((*content)[start + 1]))
+		if (ft_isalpha((*content)[start + 1]) || (*content)[start + 1] == '_')
 		{
-			while (ft_isalnum((*content)[start + len]))
+			while (ft_isalnum((*content)[start + len])
+				|| (*content)[start + len] == '_')
 				len++;
 			if (len > 1)
 				ret = ft_replace_var(id, content, start, len);
