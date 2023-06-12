@@ -5,28 +5,32 @@ static void	ft_evaluate_operators(t_tokens *tokens)
 	while (tokens)
 	{
 		if (!ft_strcmp(tokens->content, "<"))
-			tokens->id = I_RED;
+			tokens->id = IN_RED;
 		else if (!ft_strcmp(tokens->content, ">"))
-			tokens->id = O_RED;
+			tokens->id = OUT_RED;
 		else if (!ft_strcmp(tokens->content, "<<"))
 			tokens->id = HEREDOC;
 		else if (!ft_strcmp(tokens->content, ">>"))
-			tokens->id = O_RED_A;
+			tokens->id = OUT_A_RED;
 		else if (!ft_strcmp(tokens->content, "|"))
 			tokens->id = PIPE;
 		tokens = tokens->next;
 	}
 }
 
-static char	*ft_evaluate_redrections(t_tokens *tokens)
+static char	*ft_evaluate_redirections(t_tokens *tokens)
 {
 	while (tokens && tokens->next)
 	{
 		if (tokens->id & OPERATOR && tokens->id != PIPE
 			&& tokens->next->id & OPERATOR)
 			return (tokens->next->content);
-		if (tokens->id == I_RED || tokens->id == O_RED || tokens->id == O_RED_A)
-			tokens->next->id = FILE_NAME;
+		if (tokens->id == IN_RED)
+			tokens->next->id = IN_FILE;
+		else if (tokens->id == OUT_RED)
+			tokens->next->id = OUT_FILE;
+		else if (tokens->id == OUT_A_RED)
+			tokens->next->id = OUT_A_FILE;
 		else if (tokens->id == HEREDOC)
 			tokens->next->id = HEREDOC_EOF;
 		tokens = tokens->next;
@@ -79,7 +83,7 @@ char	ft_evaluate_tokens(t_tokens *tokens)
 	char	*err_context;
 
 	ft_evaluate_operators(tokens);
-	err_context = ft_evaluate_redrections(tokens);
+	err_context = ft_evaluate_redirections(tokens);
 	if (err_context)
 		return (ft_perror(ERR_TOKEN_SYNTAX, err_context), RETURN_FAILURE);
 	ft_evaluate_commands(tokens);
