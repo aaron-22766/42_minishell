@@ -45,11 +45,15 @@ enum e_errors
 /* ************************************************************************** */
 
 bool	verbose;
-// pid_t	g_child_pid;
+char	g_ctrlc;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
+
+// signals.c
+void	ft_readline_handler(int sig);
+void	ft_sig_handler(int sig);
 
 // error.c
 void	ft_perror(int err, char *context);

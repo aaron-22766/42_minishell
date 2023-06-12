@@ -8,24 +8,22 @@
 # include "global.h"
 
 /* ************************************************************************** */
-/*                                  DEFINES                                   */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
 /*                                   ENUMS                                    */
 /* ************************************************************************** */
 
 enum e_token_identifier
 {
 	WORD = 0b00000001,
-	COMMAND = 0b00000101,
-	FILE_NAME = 0b00001001,
+	IN_FILE = 0b00000101,
+	OUT_FILE = 0b00001001,
 	HEREDOC_EOF = 0b00010001,
+	OUT_A_FILE = 0b00100001,
+	COMMAND = 0b01000001,
 	OPERATOR = 0b00000010,
-	I_RED = 0b00000110,
-	O_RED = 0b00001010,
+	IN_RED = 0b00000110,
+	OUT_RED = 0b00001010,
 	HEREDOC = 0b00010010,
-	O_RED_A = 0b00100010,
+	OUT_A_RED = 0b00100010,
 	PIPE = 0b01000010
 };
 
@@ -58,6 +56,6 @@ void		ft_evaluate_commands(t_tokens *tokens);
 t_tokens	*ft_new_token(char *content);
 void		ft_free_tokens(t_tokens *tokens);
 size_t		ft_unquoted_char(char *str, const char *chars, const char *quotes);
-t_tokens	*print_tokens(t_tokens *tokens);
+t_tokens	*print_tokens(t_tokens *tokens, const char *title);
 
 #endif

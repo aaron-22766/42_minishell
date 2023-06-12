@@ -8,6 +8,7 @@
 # include "global.h"
 # include "lexer.h"
 # include "parser.h"
+# include "executor.h"
 
 /* ************************************************************************** */
 /*                                  DEFINES                                   */

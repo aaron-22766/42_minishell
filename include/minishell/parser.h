@@ -15,20 +15,16 @@
 # define RMV -1
 
 /* ************************************************************************** */
-/*                                   ENUMS                                    */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
 /*                                  STRUCTS                                   */
 /* ************************************************************************** */
 
 typedef struct s_cmds
 {
+	char			*path;
 	char			**argv;
-	char			*in_red;
-	char			**heredoc;
-	char			**out_red;
-	char			append;
+	t_tokens		*io_red;
+	int				fd_in;
+	int				fd_out;
 	struct s_cmds	*next;
 }	t_cmds;
 
@@ -41,6 +37,7 @@ t_cmds		*ft_parse(t_tokens *tokens);
 
 // expander.c
 char		ft_expand_tokens(t_tokens **tokens);
+char		ft_expand_env_vars(char **content, char *quotes, char id);
 
 // expander_utils.c
 void		ft_insert_val(char **content, char *val, size_t start, size_t len);
