@@ -56,7 +56,7 @@ static char	ft_replace_var(char id, char **content, size_t start, size_t len)
 	val = getenv(&(*content)[start + 1]);
 	if (start == 0 && len == ft_strlen(*content) && !val)
 	{
-		if (id == FILE_NAME)
+		if (id == IN_FILE || id == OUT_FILE || id == OUT_A_FILE)
 			return (ft_perror(ERR_AMBIG_RED, *content), RETURN_FAILURE);
 		return (RMV);
 	}
@@ -65,13 +65,13 @@ static char	ft_replace_var(char id, char **content, size_t start, size_t len)
 	return (RETURN_SUCCESS);
 }
 
-static char	ft_expand_env_vars(char **content, char id)
+char	ft_expand_env_vars(char **content, char *quotes, char id)
 {
 	size_t	start;
 	size_t	len;
 	char	ret;
 
-	start = ft_unquoted_char(*content, "$", "\'");
+	start = ft_unquoted_char(*content, "$", quotes);
 	while ((*content)[start])
 	{
 		len = 1;
@@ -88,7 +88,7 @@ static char	ft_expand_env_vars(char **content, char id)
 			ret = ft_replace_var(id, content, start, 2);
 		if (ret != RETURN_SUCCESS)
 			return (ret);
-		start += len + ft_unquoted_char(*content + start + len, "$", "\'");
+		start += len + ft_unquoted_char(*content + start + len, "$", quotes);
 	}
 	return (RETURN_SUCCESS);
 }
@@ -105,7 +105,7 @@ char	ft_expand_tokens(t_tokens **tokens)
 		{
 			ft_expand_tilde(&current->content, 0);
 			ft_expand_assignment_tilde(&current->content);
-			ret = ft_expand_env_vars(&current->content, current->id);
+			ret = ft_expand_env_vars(&current->content, "\'", current->id);
 			if (ret == RETURN_FAILURE)
 				return (RETURN_FAILURE);
 			else if (ret == RMV)

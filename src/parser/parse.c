@@ -29,11 +29,13 @@ t_cmds	*ft_parse(t_tokens *tokens)
 	t_cmds	*commands;
 
 	if (verbose)
-		print_tokens(tokens);
+		print_tokens(tokens, "TOKENS");
 	if (!tokens || ft_expand_tokens(&tokens) == RETURN_FAILURE || !tokens)
 		return (ft_free_tokens(tokens), NULL);
 	ft_evaluate_commands(tokens);
 	ft_remove_quotes(tokens);
+	if (verbose)
+		print_tokens(tokens, "EXPANDED TOKENS");
 	commands = ft_create_commands(tokens);
 	if (!commands)
 		return (ft_free_tokens(tokens), NULL);

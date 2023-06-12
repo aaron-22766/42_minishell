@@ -7,19 +7,16 @@ void	ft_free_cmds(t_cmds *commands)
 
 	while (commands)
 	{
+		free(commands->path);
 		i = -1;
 		while (commands->argv && commands->argv[++i])
 			free(commands->argv[i]);
 		free(commands->argv);
-		free(commands->in_red);
-		i = -1;
-		while (commands->heredoc && commands->heredoc[++i])
-			free(commands->heredoc[i]);
-		free(commands->heredoc);
-		i = -1;
-		while (commands->out_red && commands->out_red[++i])
-			free(commands->out_red[i]);
-		free(commands->out_red);
+		ft_free_tokens(commands->io_red);
+		if (commands->fd_in != STDIN_FILENO)
+			close(commands->fd_in);
+		if (commands->fd_out != STDOUT_FILENO)
+			close(commands->fd_out);
 		next = commands->next;
 		free(commands);
 		commands = next;
@@ -35,22 +32,14 @@ void	print_cmds(t_cmds *commands)
 		printf("No commands\n");
 	while (commands)
 	{
-		printf("ARG: ");
+		printf("PATH: %s\n", commands->path);
+		printf("ARGS:\n");
 		i = -1;
 		while (commands->argv && commands->argv[++i])
 			printf("[%s]", commands->argv[i]);
-		printf("\nIN : ");
-		if (commands->in_red)
-			printf("[%s]", commands->in_red);
-		printf("\nHD : ");
-		i = -1;
-		while (commands->heredoc && commands->heredoc[++i])
-			printf("[%s]", commands->heredoc[i]);
-		printf("\nOUT: ");
-		i = -1;
-		while (commands->out_red && commands->out_red[++i])
-			printf("[%s]", commands->out_red[i]);
-		printf("\nAPP: %d\n", commands->append);
+		printf("\nREDIRECTIONS:\n");
+		print_tokens(commands->io_red, NULL);
+		printf("fd_in: %d\nfd_out: %d\n", commands->fd_in, commands->fd_out);
 		commands = commands->next;
 		if (commands)
 			printf("\033[0;33m↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓\033[0m\n");

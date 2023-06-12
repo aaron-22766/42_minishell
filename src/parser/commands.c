@@ -1,56 +1,73 @@
 #include "../../include/minishell/parser.h"
 
-static void	ft_tokens_to_command(t_tokens *tokens, t_cmds *command)
+static void	ft_args_to_table(t_tokens *tokens, t_cmds *command)
 {
 	size_t	argvs;
-	size_t	heredocs;
-	size_t	out_reds;
 
 	argvs = 0;
-	heredocs = 0;
-	out_reds = 0;
-	while (tokens && tokens->id != PIPE)
+	while (tokens)
 	{
 		if (tokens->id == COMMAND || tokens->id == WORD)
 			command->argv[argvs++] = tokens->content;
-		else if (tokens->id == I_RED)
+		else if (tokens->id == PIPE)
 		{
-			free(command->in_red);
-			command->in_red = tokens->next->content;
-		}
-		else if (tokens->id == HEREDOC)
-			command->heredoc[heredocs++] = tokens->next->content;
-		else if (tokens->id == O_RED || tokens->id == O_RED_A)
-		{
-			command->out_red[out_reds++] = tokens->next->content;
-			command->append = O_APPEND * (tokens->id == O_RED_A);
+			command = command->next;
+			argvs = 0;
 		}
 		tokens = tokens->next;
 	}
 }
 
-static void	ft_tokens_to_table(t_tokens *tokens, t_cmds *command)
+static void	ft_alter_tokens(t_tokens **tokens)
 {
-	while (tokens)
+	t_tokens	*prev;
+	t_tokens	*current;
+	t_tokens	*next;
+
+	prev = NULL;
+	current = *tokens;
+	while (current)
 	{
-		ft_tokens_to_command(tokens, command);
-		while (tokens && tokens->id != PIPE)
-			tokens = tokens->next;
-		if (tokens)
-			tokens = tokens->next;
-		command = command->next;
+		next = current->next;
+		if ((current->id & OPERATOR) && current->id != PIPE)
+			free(current->content);
+		if (((current->id & OPERATOR) && current->id != PIPE)
+			|| current->id == COMMAND || current->id == WORD)
+		{
+			free(current);
+			if (prev)
+				prev->next = next;
+			else
+				*tokens = next;
+		}
+		else
+			prev = current;
+		current = next;
 	}
 }
 
-static void	ft_free_operators(t_tokens *tokens)
+static void	ft_redirections_to_table(t_tokens *tokens, t_cmds *command)
 {
+	t_tokens	*prev;
 	t_tokens	*next;
 
+	prev = NULL;
 	while (tokens)
 	{
+		if (tokens->id != PIPE)
+			command->io_red = tokens;
+		while (tokens && tokens->id != PIPE)
+		{
+			prev = tokens;
+			tokens = tokens->next;
+		}
+		if (!tokens)
+			return ;
+		command = command->next;
+		if (prev)
+			prev->next = NULL;
 		next = tokens->next;
-		if (tokens->id & OPERATOR)
-			free(tokens->content);
+		free(tokens->content);
 		free(tokens);
 		tokens = next;
 	}
@@ -58,14 +75,13 @@ static void	ft_free_operators(t_tokens *tokens)
 
 t_cmds	*ft_create_commands(t_tokens *tokens)
 {
-	t_cmds	*commands;
-	t_cmds	*temp;
+	t_cmds	*table;
 
-	commands = ft_allocate_command_table(tokens);
-	if (!commands)
+	table = ft_allocate_command_table(tokens);
+	if (!table)
 		return (ft_perror(ERR_MEM, "creating command table"), NULL);
-	temp = commands;
-	ft_tokens_to_table(tokens, commands);
-	ft_free_operators(tokens);
-	return (commands);
+	ft_args_to_table(tokens, table);
+	ft_alter_tokens(&tokens);
+	ft_redirections_to_table(tokens, table);
+	return (table);
 }
