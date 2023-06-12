@@ -25,7 +25,7 @@ void	dumb_builtins(char *line)
 	{
 		free(line);
 		ft_free_environ();
-		// system("leaks minishell");
+		system("leaks minishell");
 		exit(EXIT_SUCCESS);
 	}
 	else if (!ft_strcmp(line, "env"))
@@ -50,24 +50,23 @@ void	dumb_builtins(char *line)
 
 void	ft_run_shell(void)
 {
-	t_cmds	*commands;
 	char	*line;
+
+	char	status;//exit status connect with other uses
 
 	ft_welcome_shell();
 	while (true)
 	{
+		signal(SIGINT, ft_readline_handler);
 		line = readline("minishell> ");
+		signal(SIGINT, ft_sig_handler);
 		if (!line)
 			line = ft_strdup("exit");
 		if (line[0])
 		{
 			add_history(line);
 			dumb_builtins(line);
-			commands = ft_parse(ft_lex(line));
-			if (verbose)
-				print_cmds(commands);
-			ft_free_cmds(commands);
-			// execute(evaluate(parse(lex(line))));
+			status = ft_execute(ft_parse(ft_lex(line)));
 		}
 	}
 }

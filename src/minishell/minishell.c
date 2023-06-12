@@ -1,14 +1,14 @@
 #include "../../include/minishell/minishell.h"
 
-static void	ft_sighandler(int sig)
-{
-	(void)sig;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	// set variable so that child won't be created
-}
+// static void	ft_sighandler(int sig)
+// {
+// 	(void)sig;
+// 	printf("\n");
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// 	// set variable so that child won't be created
+// }
 
 static void	ft_set_verbose(int argc, char **argv)
 {
@@ -32,7 +32,7 @@ static void	ft_configure_terminal(void)
 
 int	main(int argc, char **argv)
 {
-	signal(SIGINT, &ft_sighandler);
+	// signal(SIGINT, &ft_sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	ft_set_verbose(argc, argv);
 	ft_init_shell(argv[0]);
