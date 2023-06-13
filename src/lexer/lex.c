@@ -49,7 +49,6 @@ t_tokens	*ft_lex(char *line)
 	t_tokens	*tokens;
 
 	tokens = ft_get_tokens(line);
-	free(line);
 	if (!tokens || ft_split_at_operators(tokens) == RETURN_FAILURE)
 		return (ft_free_tokens(tokens), NULL);
 	if (ft_evaluate_tokens(tokens) == RETURN_FAILURE)

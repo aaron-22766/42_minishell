@@ -33,7 +33,7 @@ void	print_cmds(t_cmds *commands)
 	while (commands)
 	{
 		printf("PATH: %s\n", commands->path);
-		printf("ARGS:\n");
+		printf("ARGS:");
 		i = -1;
 		while (commands->argv && commands->argv[++i])
 			printf("[%s]", commands->argv[i]);

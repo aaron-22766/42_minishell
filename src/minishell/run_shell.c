@@ -61,12 +61,16 @@ void	ft_run_shell(void)
 		line = readline("minishell> ");
 		signal(SIGINT, ft_sig_handler);
 		if (!line)
-			line = ft_strdup("exit");
+		{
+			// ft_exit(NULL);
+			line = ft_strdup("exit");//remove
+		}
 		if (line[0])
 		{
 			add_history(line);
 			dumb_builtins(line);
 			status = ft_execute(status, ft_parse(status, ft_lex(line)));
 		}
+		free(line);
 	}
 }
