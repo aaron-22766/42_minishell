@@ -16,8 +16,9 @@ static char	ft_create_pipes(t_cmds *commands)
 	return (RETURN_SUCCESS);
 }
 
-char	ft_install_redirections(t_cmds *command)
+char	ft_install_redirections(unsigned char status, t_cmds *command)
 {
+	(void)status;
 	(void)command;
 	return (RETURN_SUCCESS);
 }
@@ -35,10 +36,10 @@ void	ft_try_builtin(char **args)
 	// 	exit(EXIT_SUCCESS);
 }
 
-void	ft_execute_child(t_cmds *command)
+void	ft_execute_child(unsigned char status, t_cmds *command)
 {
 	signal(SIGINT, ft_sig_handler);
-	if (ft_install_redirections(command) == RETURN_FAILURE)
+	if (ft_install_redirections(status, command) == RETURN_FAILURE)
 		exit(EXIT_FAILURE);
 	command->path = ft_find_path(command->argv[0]);
 	if (!command->path)
@@ -51,10 +52,10 @@ void	ft_execute_child(t_cmds *command)
 	exit(EXIT_FAILURE);
 }
 
-unsigned char	ft_create_child(t_cmds *command)
+unsigned char	ft_create_child(unsigned char status, t_cmds *command)
 {
 	pid_t	pid;
-	int		status;
+	int		wait_status;
 
 	if (g_ctrlc == true)
 		return (130);
@@ -62,29 +63,27 @@ unsigned char	ft_create_child(t_cmds *command)
 	if (pid < 0)
 		return (ft_perror(ERR_ERRNO, "fork failed"), RETURN_FAILURE);
 	if (pid == 0)
-		ft_execute_child(command);
+		ft_execute_child(status, command);
 	else
 	{
 		signal(SIGINT, SIG_IGN);
-		if (waitpid(pid, &status, 0) == -1)
+		if (waitpid(pid, &wait_status, 0) == -1)
 			ft_perror(ERR_ERRNO, "waiting for child process failed");
-		return (WEXITSTATUS(status));
+		return (WEXITSTATUS(wait_status));
 	}
 	return (RETURN_FAILURE);
 }
 
-unsigned char	ft_execute(t_cmds *commands)
+unsigned char	ft_execute(unsigned char status, t_cmds *commands)
 {
-	unsigned char	status;
-
-	// system("leaks minishell");
+	system("leaks minishell");
 	if (!commands || ft_create_pipes(commands) == RETURN_FAILURE)
 		return (ft_free_cmds(commands), RETURN_FAILURE);
 	if (verbose)
 		print_cmds(commands);
 	while (commands)
 	{
-		status = ft_create_child(commands);
+		status = ft_create_child(status, commands);
 		if (status != EXIT_SUCCESS)
 			return (ft_free_cmds(commands), status);
 		commands = commands->next;

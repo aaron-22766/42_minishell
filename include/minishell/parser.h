@@ -33,11 +33,12 @@ typedef struct s_cmds
 /* ************************************************************************** */
 
 // parse.c
-t_cmds		*ft_parse(t_tokens *tokens);
+t_cmds		*ft_parse(unsigned char status, t_tokens *tokens);
 
 // expander.c
-char		ft_expand_tokens(t_tokens **tokens);
-char		ft_expand_env_vars(char **content, char *quotes, char id);
+char		ft_expand_tokens(unsigned char status, t_tokens **tokens);
+char		ft_expand_env_vars(unsigned char status, char **content,
+				char *quotes, char id);
 
 // expander_utils.c
 void		ft_insert_val(char **content, char *val, size_t start, size_t len);

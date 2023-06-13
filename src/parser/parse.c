@@ -24,13 +24,14 @@ static void	ft_remove_quotes(t_tokens *tokens)
 	}
 }
 
-t_cmds	*ft_parse(t_tokens *tokens)
+t_cmds	*ft_parse(unsigned char status, t_tokens *tokens)
 {
 	t_cmds	*commands;
 
 	if (verbose)
 		print_tokens(tokens, "TOKENS");
-	if (!tokens || ft_expand_tokens(&tokens) == RETURN_FAILURE || !tokens)
+	if (!tokens || ft_expand_tokens(status, &tokens) == RETURN_FAILURE
+		|| !tokens)
 		return (ft_free_tokens(tokens), NULL);
 	ft_evaluate_commands(tokens);
 	ft_remove_quotes(tokens);

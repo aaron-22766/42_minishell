@@ -13,6 +13,6 @@
 /* ************************************************************************** */
 
 // execute.c
-unsigned char	ft_execute(t_cmds *commands);
+unsigned char	ft_execute(unsigned char status, t_cmds *commands);
 
 #endif

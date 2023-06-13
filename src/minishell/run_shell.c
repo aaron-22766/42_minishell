@@ -50,10 +50,10 @@ void	dumb_builtins(char *line)
 
 void	ft_run_shell(void)
 {
-	char	*line;
+	unsigned char	status;
+	char			*line;
 
-	char	status;//exit status connect with other uses
-
+	status = 0;
 	ft_welcome_shell();
 	while (true)
 	{
@@ -66,7 +66,7 @@ void	ft_run_shell(void)
 		{
 			add_history(line);
 			dumb_builtins(line);
-			status = ft_execute(ft_parse(ft_lex(line)));
+			status = ft_execute(status, ft_parse(status, ft_lex(line)));
 		}
 	}
 }

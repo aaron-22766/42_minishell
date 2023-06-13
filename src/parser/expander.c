@@ -38,62 +38,64 @@ static void	ft_expand_assignment_tilde(char **content)
 		ft_expand_tilde(content, i + 1);
 }
 
-static char	ft_replace_var(char id, char **content, size_t start, size_t len)
+static char	ft_replace_var(unsigned char status, char id, char **content,
+			size_t var[2])
 {
 	char	*val;
 	char	temp;
 
-	if ((*content)[start + 1] == '?')
+	if ((*content)[var[0] + 1] == '?')
 	{
-		val = ft_itoa(-42);//real exit status
+		val = ft_itoa(status);
 		if (val)
-			ft_insert_val(content, val, start, len);
+			ft_insert_val(content, val, var[0], var[1]);
 		free(val);
 		return (RETURN_SUCCESS);
 	}
-	temp = (*content)[start + len];
-	(*content)[start + len] = '\0';
-	val = getenv(&(*content)[start + 1]);
-	if (start == 0 && len == ft_strlen(*content) && !val)
+	temp = (*content)[var[0] + var[1]];
+	(*content)[var[0] + var[1]] = '\0';
+	val = getenv(&(*content)[var[0] + 1]);
+	if (var[0] == 0 && var[1] == ft_strlen(*content) && !val)
 	{
 		if (id == IN_FILE || id == OUT_FILE || id == OUT_A_FILE)
 			return (ft_perror(ERR_AMBIG_RED, *content), RETURN_FAILURE);
 		return (RMV);
 	}
-	(*content)[start + len] = temp;
-	ft_insert_val(content, val, start, len);
+	(*content)[var[0] + var[1]] = temp;
+	ft_insert_val(content, val, var[0], var[1]);
 	return (RETURN_SUCCESS);
 }
 
-char	ft_expand_env_vars(char **content, char *quotes, char id)
+char	ft_expand_env_vars(unsigned char status, char **content, char *quotes,
+		char id)
 {
-	size_t	start;
-	size_t	len;
+	size_t	var[2];
 	char	ret;
 
-	start = ft_unquoted_char(*content, "$", quotes);
-	while ((*content)[start])
+	var[0] = ft_unquoted_char(*content, "$", quotes);
+	while ((*content)[var[0]])
 	{
-		len = 1;
+		var[1] = 1;
 		ret = RETURN_SUCCESS;
-		if (ft_isalpha((*content)[start + 1]) || (*content)[start + 1] == '_')
+		if (ft_isalpha((*content)[var[0] + 1]) || (*content)[var[0] + 1] == '_')
 		{
-			while (ft_isalnum((*content)[start + len])
-				|| (*content)[start + len] == '_')
-				len++;
-			if (len > 1)
-				ret = ft_replace_var(id, content, start, len);
+			while (ft_isalnum((*content)[var[0] + var[1]])
+				|| (*content)[var[0] + var[1]] == '_')
+				var[1]++;
+			if (var[1] > 1)
+				ret = ft_replace_var(status, id, content, var);
 		}
-		else if ((*content)[start + 1] == '?')
-			ret = ft_replace_var(id, content, start, 2);
+		else if ((*content)[var[0] + 1] == '?' && var[1]++)
+			ret = ft_replace_var(status, id, content, var);
 		if (ret != RETURN_SUCCESS)
 			return (ret);
-		start += len + ft_unquoted_char(*content + start + len, "$", quotes);
+		var[0] += var[1] + ft_unquoted_char(*content + var[0] + var[1],
+				"$", quotes);
 	}
 	return (RETURN_SUCCESS);
 }
 
-char	ft_expand_tokens(t_tokens **tokens)
+char	ft_expand_tokens(unsigned char status, t_tokens **tokens)
 {
 	t_tokens	*current;
 	char		ret;
@@ -105,7 +107,8 @@ char	ft_expand_tokens(t_tokens **tokens)
 		{
 			ft_expand_tilde(&current->content, 0);
 			ft_expand_assignment_tilde(&current->content);
-			ret = ft_expand_env_vars(&current->content, "\'", current->id);
+			ret = ft_expand_env_vars(status, &current->content,
+					"\'", current->id);
 			if (ret == RETURN_FAILURE)
 				return (RETURN_FAILURE);
 			else if (ret == RMV)
