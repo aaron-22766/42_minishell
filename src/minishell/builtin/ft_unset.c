@@ -8,7 +8,8 @@ int	ft_unset_inv(char *str)
 	while (str[i] != '\0')
 	{
 		if (ft_strchr(str, '?') || ft_strchr(str, '$') || ft_strchr(str, '%')
-			|| ft_strchr(str, '-') || ft_strchr(str, '=') || ft_strchr(str, '/'))
+			|| ft_strchr(str, '-') || ft_strchr(str, '=')
+			|| ft_strchr(str, '/'))
 			return (1);
 		if (ft_isdigit(str[i]))
 			return (1);

@@ -3,8 +3,8 @@
 void	ft_print_exp(void)
 {
 	extern char	**environ;
-	int	i;
-	
+	int			i;
+
 	i = 0;
 	while (environ[i])
 	{
@@ -46,7 +46,8 @@ char	ft_check_exp(t_cmds *command, char exp, int i)
 		len++;
 	while (environ[n])
 	{
-		if (!ft_strncmp(command->argv[i], environ[n], len) && environ[n][len] == '=')
+		if (!ft_strncmp(command->argv[i], environ[n], len)
+			&& environ[n][len] == '=')
 		{
 			free(environ[n]);
 			if (exp)
