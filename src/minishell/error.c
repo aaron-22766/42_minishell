@@ -16,7 +16,8 @@ void	ft_perror_exe(char *exe, int err, char *context)
 {
 	ft_eprintf("%s: ", exe);
 	ft_print_error(err, context);
-	ft_eprintf("\n");
+	if (err != ERR_ERRNO)
+		ft_eprintf("\n");
 }
 
 void	ft_perror_builtin(char *builtin, int err, char *context)

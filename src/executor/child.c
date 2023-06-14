@@ -11,7 +11,7 @@ static void	ft_try_builtin(char **args, t_cmds *commands)
 static char	*ft_find_path(char *name)
 {
 	(void)name;
-	return (ft_strdup("/bin/echo"));
+	return (ft_strdup("/bin/cat"));
 }
 
 static void	ft_execute_child(unsigned char status, t_cmds *cmd,
