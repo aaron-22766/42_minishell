@@ -1,17 +1,16 @@
 #include "../../include/minishell/executor.h"
 
-void	ft_heredoc_handler(int sig)
+static void	ft_heredoc_handler(int sig)
 {
-	printf("\n");
-	rl_on_new_line();
+	ft_printf("\n");
 	rl_replace_line(NULL, 0);
 	(void)sig;
 }
 
 static int	ft_heredoc(unsigned char status, char *eof)
 {
-	int				fd[2];
-	char			*line;
+	int		fd[2];
+	char	*line;
 
 	if (pipe(fd) == -1)
 		return (ft_perror(ERR_ERRNO, "failed to create heredoc file"), -1);
@@ -33,7 +32,6 @@ static char	ft_set_redirection(unsigned char status, t_tokens *red, t_cmds *cmd)
 {
 	int	fd;
 
-	ft_printf("\nred: %d\n", red->id);
 	fd = -1;
 	if (red->id == OUT_FILE || red->id == OUT_A_FILE)
 		fd = open(red->content, (O_TRUNC * (red->id == OUT_FILE))
@@ -48,11 +46,13 @@ static char	ft_set_redirection(unsigned char status, t_tokens *red, t_cmds *cmd)
 		return (RETURN_FAILURE);
 	if (red->id == OUT_FILE || red->id == OUT_A_FILE)
 	{
-		close(cmd->fd_out);
+		if (cmd->fd_out != STDOUT_FILENO)
+			close(cmd->fd_out);
 		cmd->fd_out = fd;
 		return (RETURN_SUCCESS);
 	}
-	close(cmd->fd_in);
+	if (cmd->fd_in != STDIN_FILENO)
+		close(cmd->fd_in);
 	cmd->fd_in = fd;
 	return (RETURN_SUCCESS);
 }
