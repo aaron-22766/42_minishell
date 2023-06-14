@@ -20,7 +20,6 @@ int	ft_unset_inv(char *str)
 
 void	ft_unset(t_cmds *command)
 {
-	extern char	**environ;
 	int			i;
 
 	i = 0;
@@ -37,8 +36,13 @@ void	ft_unset(t_cmds *command)
 		if (!ft_unset_inv(command->argv[i]))
 			ft_unsetenv(command->argv[i]);
 		else
+		{
 			printf("minishell: unset: not a valid identifier\n");
+			ft_free_commands(command);
+			exit(1);
+		}
 		i++;
 	}
 	ft_free_commands(command);
+	exit(0);
 }

@@ -2,8 +2,9 @@
 
 void	ft_pwd(t_cmds *command)
 {
-	char	pwd;
+	char	*pwd;
 
+	pwd = NULL;
 	if (command->argv[0])
 	{
 		pwd = getcwd(NULL, 0);
@@ -13,4 +14,5 @@ void	ft_pwd(t_cmds *command)
 		printf("minishell: pwd: no options available\n");
 	ft_free_commands(command);
 	free(pwd);
+	exit(0);
 }

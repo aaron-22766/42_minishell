@@ -2,7 +2,6 @@
 
 void	ft_env(t_cmds *command)
 {
-	extern char	**environ;
 	int			i;
 
 	i = 0;

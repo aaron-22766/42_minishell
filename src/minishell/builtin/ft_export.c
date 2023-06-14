@@ -13,7 +13,7 @@ void	ft_print_exp(void)
 	}
 }
 
-char	ft_check_var(char *cmd)
+int	ft_check_var(t_cmds *command, char *cmd)
 {
 	int	i;
 
@@ -21,7 +21,8 @@ char	ft_check_var(char *cmd)
 	if (!ft_isalpha(cmd[i]) && cmd[i] != '_')
 	{
 		printf("minishell: export: '%s': not a valid identifier\n", cmd);
-		return (-1);
+		ft_free_commands(command);
+		exit(1);
 	}
 	while (cmd[i] && cmd[i] != '=')
 		i++;
@@ -34,7 +35,7 @@ char	ft_check_var(char *cmd)
 	return (-1);
 }
 
-char	ft_check_exp(t_cmds *command, char exp, int i)
+int	ft_check_exp(t_cmds *command, char exp, int i)
 {
 	extern char	**environ;
 	int			n;
@@ -65,19 +66,19 @@ char	ft_check_exp(t_cmds *command, char exp, int i)
 
 void	ft_export(t_cmds *command)
 {
-	extern char	**environ;
-	int			i;
-	char		*check_exp;
+	int	i;
+	int	check_exp;
 
 	i = 1;
 	if (!command->argv[i])
 		ft_print_exp();
 	while (command->argv[i])
 	{
-		check_exp = ft_check_var(command->argv[i]);
+		check_exp = ft_check_var(command, command->argv[i]);
 		if (check_exp != -1)
 			check_exp = ft_check_exp(command, check_exp, i);
 		i++;
 	}
 	ft_free_commands(command);
+	exit(0);
 }

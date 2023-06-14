@@ -25,6 +25,8 @@ void	ft_exit(t_cmds *command)
 	int	i;
 
 	i = 0;
+	if (!command->argv[0])
+		exit(0);
 	while (command->argv[i])
 		i++;
 	if (i > 2)

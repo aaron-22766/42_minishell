@@ -1,6 +1,6 @@
 #include "../../../include/minishell/minishell.h"
 
-int	ft_echo(t_cmds *command)
+void	ft_echo(t_cmds *command)
 {
 	int	i;
 	int	check;
@@ -21,5 +21,5 @@ int	ft_echo(t_cmds *command)
 	if (check == 0)
 		printf("\n");
 	ft_free_commands(command);
-	return (0);
+	exit(0);
 }
