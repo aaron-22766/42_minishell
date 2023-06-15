@@ -51,19 +51,21 @@ void	dumb_builtins(char *line)
 void	ft_run_shell(void)
 {
 	unsigned char	status;
+	char			*prompt;
 	char			*line;
 
 	status = 0;
+	prompt = "minishell> ";
 	ft_welcome_shell();
 	while (true)
 	{
 		signal(SIGINT, ft_readline_handler);
-		line = readline("minishell> ");
+		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
 		if (!line)
 		{
-			// ft_exit(NULL);
-			line = ft_strdup("exit");//remove
+			ft_printf("\033[A\033[K%sexit\n", prompt);
+			exit(0);
 		}
 		if (line[0])
 		{

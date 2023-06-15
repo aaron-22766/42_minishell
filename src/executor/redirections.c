@@ -10,15 +10,19 @@ static void	ft_heredoc_handler(int sig)
 static int	ft_heredoc(unsigned char status, char *eof)
 {
 	int		fd[2];
+	char	*prompt;
 	char	*line;
 
 	if (pipe(fd) == -1)
 		return (ft_perror(ERR_ERRNO, "failed to create heredoc file"), -1);
+	prompt = "> ";
 	while (true)
 	{
 		signal(SIGINT, ft_heredoc_handler);
-		line = readline("> ");
+		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
+		if (!line && rl_eof_found)
+			ft_printf("\033[A\033[K%s", prompt);
 		if (!line || !ft_strcmp(line, eof))
 			return (free(line), close(fd[1]), fd[0]);
 		if (ft_expand_env_vars(status, &line, "", 0) != RMV)
