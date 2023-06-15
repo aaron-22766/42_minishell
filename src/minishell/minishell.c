@@ -20,8 +20,15 @@ static void	ft_configure_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 }
 
+static void	test(void)
+{
+	ft_printf("branch");
+}
+
 int	main(int argc, char **argv)
 {
+	test();
+	test();
 	signal(SIGQUIT, SIG_IGN);
 	ft_set_verbose(argc, argv);
 	ft_init_shell(argv[0]);
