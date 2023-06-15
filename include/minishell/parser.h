@@ -41,7 +41,6 @@ char		ft_expand_env_vars(unsigned char status, char **content,
 				char *quotes, char id);
 
 // expander_utils.c
-void		ft_insert_val(char **content, char *val, size_t start, size_t len);
 ssize_t		ft_setchar(char *str, char c, ssize_t index);
 t_tokens	*ft_remove_token(t_tokens **head, t_tokens *remove);
 

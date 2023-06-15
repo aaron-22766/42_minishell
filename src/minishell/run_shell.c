@@ -7,12 +7,12 @@ static void	ft_welcome_shell(void)
 	user = getenv("USER");
 	printf("\n*****************************************\n");
 	printf("*\t\t\t\t\t*\n");
-	printf("*\t\t\033[1;34mMINISHELL\033[0m\t\t*\n");
+	printf("*\t\t\e[1;34mMINISHELL\e[0m\t\t*\n");
 	printf("*\t\t\t\t\t*\n");
 	printf("*\tby @arabenst & @rhortens\t*\n");
 	printf("*\t\t\t\t\t*\n");
 	printf("*****************************************\n");
-	printf("current user is: \033[1;32m@%s\033[0m\n\n", user);
+	printf("current user is: \e[1;32m@%s\e[0m\n\n", user);
 }
 
 // remove dumb_builtins function when builtins can be used
@@ -55,10 +55,11 @@ void	ft_run_shell(void)
 	char			*line;
 
 	status = 0;
-	prompt = "minishell> ";
 	ft_welcome_shell();
 	while (true)
 	{
+		// prompt = ft_get_prompt(getenv("PS1"));
+		prompt = "minishell> ";
 		signal(SIGINT, ft_readline_handler);
 		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);

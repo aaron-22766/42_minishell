@@ -15,7 +15,9 @@ static int	ft_heredoc(unsigned char status, char *eof)
 
 	if (pipe(fd) == -1)
 		return (ft_perror(ERR_ERRNO, "failed to create heredoc file"), -1);
-	prompt = "> ";
+	prompt = getenv("PS2");
+	if (!prompt)
+		prompt = "> ";
 	while (true)
 	{
 		signal(SIGINT, ft_heredoc_handler);

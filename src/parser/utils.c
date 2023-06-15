@@ -27,7 +27,7 @@ void	print_cmds(t_cmds *commands)
 {
 	size_t	i;
 
-	printf("\033[1;33mCOMMANDS\033[0m\n");
+	printf("\e[1;33mCOMMANDS\e[0m\n");
 	if (!commands)
 		printf("No commands\n");
 	while (commands)
@@ -42,6 +42,6 @@ void	print_cmds(t_cmds *commands)
 		printf("fd_in: %d\nfd_out: %d\n", commands->fd_in, commands->fd_out);
 		commands = commands->next;
 		if (commands)
-			printf("\033[0;33m↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓\033[0m\n");
+			printf("\e[0;33m↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓\e[0m\n");
 	}
 }

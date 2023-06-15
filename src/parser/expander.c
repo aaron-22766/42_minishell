@@ -9,20 +9,20 @@ static void	ft_expand_tilde(char **cont, size_t t)
 	if ((*cont)[t] != '~')
 		return ;
 	if (getenv("HOME") && ((*cont)[t + 1] == '\0' || (*cont)[t + 1] == '/'))
-		ft_insert_val(cont, getenv("HOME"), t, 1);
+		ft_str_insert(cont, getenv("HOME"), t, 1);
 	else if (getenv("PWD") && (*cont)[t + 1] == '+'
 		&& ((*cont)[t + 2] == '\0' || (*cont)[t + 2] == '/'))
-		ft_insert_val(cont, getenv("PWD"), t, 2);
+		ft_str_insert(cont, getenv("PWD"), t, 2);
 	else if (getenv("OLDPWD") && (*cont)[t + 1] == '-'
 		&& ((*cont)[t + 2] == '\0' || (*cont)[t + 2] == '/'))
-		ft_insert_val(cont, getenv("OLDPWD"), t, 2);
+		ft_str_insert(cont, getenv("OLDPWD"), t, 2);
 	else if ((*cont)[t + 1])
 	{
 		end = ft_setchar(*cont + t, '\0', ft_strchr_index(*cont + t, '/'));
 		ft_asprintf(&path, "/Users/%s", *cont + t + 1);
 		end = ft_setchar(*cont + t, '/', end);
 		if (path && !stat(path, &stats) && S_ISDIR(stats.st_mode))
-			ft_insert_val(cont, path, t, end);
+			ft_str_insert(cont, path, t, end);
 		free(path);
 	}
 }
@@ -48,7 +48,7 @@ static char	ft_replace_var(unsigned char status, char id, char **content,
 	{
 		val = ft_itoa(status);
 		if (val)
-			ft_insert_val(content, val, var[0], var[1]);
+			ft_str_insert(content, val, var[0], var[1]);
 		free(val);
 		return (RETURN_SUCCESS);
 	}
@@ -62,7 +62,7 @@ static char	ft_replace_var(unsigned char status, char id, char **content,
 		return (RMV);
 	}
 	(*content)[var[0] + var[1]] = temp;
-	ft_insert_val(content, val, var[0], var[1]);
+	ft_str_insert(content, val, var[0], var[1]);
 	return (RETURN_SUCCESS);
 }
 

@@ -52,7 +52,7 @@ size_t	ft_unquoted_char(char *str, const char *chars, const char *quotes)
 t_tokens	*print_tokens(t_tokens *tokens, const char *title)
 {
 	if (title)
-		printf("\033[1;33m%s\033[0m\n", title);
+		printf("\e[1;33m%s\e[0m\n", title);
 	if (!tokens)
 		printf("No tokens\n");
 	while (tokens)
