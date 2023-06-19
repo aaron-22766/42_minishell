@@ -26,6 +26,5 @@ int	main(int argc, char **argv)
 	ft_set_verbose(argc, argv);
 	ft_init_shell(argv[0]);
 	ft_configure_terminal();
-	ft_run_shell();
-	return (-1);
+	return (ft_run_shell(0));
 }

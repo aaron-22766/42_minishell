@@ -20,7 +20,10 @@
 void	ft_init_shell(char *ms_path);
 
 // run_shell.c
-void	ft_run_shell(void);
+int		ft_run_shell(unsigned char status);
+
+// prompt.c
+char	*ft_expand_prompt(char *prompt);
 
 // env_funcs.c
 int		ft_setenv(const char *name, const char *value, int overwrite);

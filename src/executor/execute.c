@@ -23,13 +23,14 @@ unsigned char	ft_execute(unsigned char status, t_cmds *commands)
 	if (!commands || ft_create_pipes(commands) == RETURN_FAILURE)
 		return (ft_free_cmds(commands), RETURN_FAILURE);
 	if (verbose)
+	{
 		print_cmds(commands);
+		printf("\e[1;33mOUTPUT\e[0m\n");
+	}
 	cmd = commands;
 	while (cmd)
 	{
 		status = ft_create_child(status, cmd, commands);
-		if (status != EXIT_SUCCESS)
-			return (ft_free_cmds(commands), status);
 		cmd = cmd->next;
 	}
 	return (ft_free_cmds(commands), RETURN_SUCCESS);

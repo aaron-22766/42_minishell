@@ -1,29 +1,21 @@
 #include "../../include/minishell/executor.h"
 
-static void	ft_try_builtin(char **args, t_cmds *commands)
-{
-	(void)args;
-	(void)commands;
-	// if (builtin)
-	// 	exit(EXIT_SUCCESS);
-}
-
 static char	*ft_find_path(char *name)
 {
 	(void)name;
-	return (ft_strdup("/bin/cat"));
+	return (ft_strdup("/bin/echo"));
 }
 
 static void	ft_execute_child(unsigned char status, t_cmds *cmd,
 			t_cmds *commands)
 {
-	signal(SIGINT, ft_sig_handler);
+	signal(SIGINT, ft_sig_handler);//?
 	if (ft_install_redirections(status, cmd) == RETURN_FAILURE)
 	{
 		ft_free_cmds(commands);
 		exit(EXIT_FAILURE);
 	}
-	ft_try_builtin(cmd->argv, commands);
+	// ft_try_builtin(cmd->argv, commands);
 	cmd->path = ft_find_path(cmd->argv[0]);
 	if (!cmd->path)
 	{

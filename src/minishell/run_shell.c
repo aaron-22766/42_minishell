@@ -2,9 +2,6 @@
 
 static void	ft_welcome_shell(void)
 {
-	char	*user;
-
-	user = getenv("USER");
 	printf("\n*****************************************\n");
 	printf("*\t\t\t\t\t*\n");
 	printf("*\t\t\e[1;34mMINISHELL\e[0m\t\t*\n");
@@ -12,68 +9,64 @@ static void	ft_welcome_shell(void)
 	printf("*\tby @arabenst & @rhortens\t*\n");
 	printf("*\t\t\t\t\t*\n");
 	printf("*****************************************\n");
-	printf("current user is: \e[1;32m@%s\e[0m\n\n", user);
+	printf("current user is: \e[1;32m@%s\e[0m\n\n", getenv("USER"));
 }
 
-// remove dumb_builtins function when builtins can be used
-void	dumb_builtins(char *line)
+static char	ft_only_space(char *line)
 {
-	char	**args;
-	int		i;
+	size_t	i;
 
-	if (!ft_strcmp(line, "exit"))
-	{
-		free(line);
-		ft_free_environ();
-		system("leaks minishell");
-		exit(EXIT_SUCCESS);
-	}
-	else if (!ft_strcmp(line, "env"))
-		ft_print_environ();
+	i = -1;
+	while (line[++i])
+		if (!ft_isspace(line[i]))
+			return (false);
+	return (true);
+}
+
+static char	*ft_get_prompt(char *prompt, unsigned char status, char execute)
+{
+	char	*new;
+
+	prompt = ft_expand_prompt(prompt);
+	if (!prompt)
+		return (NULL);
+	if (!execute)
+		ft_asprintf(&new, "\e[30;1m▶︎\e[0m %s", prompt);
+	else if (status)
+		ft_asprintf(&new, "\e[1;31m▶︎\e[0m %s", prompt);
 	else
-	{
-		args = ft_split(line, ' ');
-		if (args && args[0] && !ft_strcmp(args[0], "export"))
-			ft_putenv(args[1]);
-		else if (args && args[0] && !ft_strcmp(args[0], "unset"))
-			ft_unsetenv(args[1]);
-		else if (args && args[0] && !ft_strcmp(args[0], "getenv"))
-			printf("%s\n", getenv(args[1]));
-		// else
-		// 	system(line);
-		i = -1;
-		while (args && args[++i])
-			free(args[i]);
-		free(args);
-	}
+		ft_asprintf(&new, "\e[1;32m▶︎\e[0m %s", prompt);
+	if (!new)
+		return (prompt);
+	free(prompt);
+	return (new);
 }
 
-void	ft_run_shell(void)
+int	ft_run_shell(unsigned char status)
 {
-	unsigned char	status;
-	char			*prompt;
-	char			*line;
+	char	execute;
+	char	*prompt;
+	char	*line;
 
-	status = 0;
+	execute = 0;
 	ft_welcome_shell();
 	while (true)
 	{
-		// prompt = ft_get_prompt(getenv("PS1"));
-		prompt = "minishell> ";
+		prompt = ft_get_prompt(getenv("PS1"), status, execute);
 		signal(SIGINT, ft_readline_handler);
 		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
-		if (!line)
-		{
-			ft_printf("\033[A\033[K%sexit\n", prompt);
-			exit(0);
-		}
+		if (!line && rl_eof_found)
+			return (ft_printf("\e[A\e[K%sexit\n", prompt), free(prompt), 0);
+		else if (!line)
+			ft_perror(ERR_ERRNO, "readline");
+		free(prompt);
 		if (line[0])
-		{
 			add_history(line);
-			dumb_builtins(line);
+		execute = !ft_only_space(line);
+		if (execute)
 			status = ft_execute(status, ft_parse(status, ft_lex(line)));
-		}
-		free(line);
+		else
+			free(line);
 	}
 }

@@ -80,5 +80,3 @@ char	ft_install_redirections(unsigned char status, t_cmds *cmd)
 		return (ft_perror(ERR_ERRNO, "failed to redirect"), RETURN_FAILURE);
 	return (RETURN_SUCCESS);
 }
-// cat << EOF < Makefile << END -> prints Makefile into heredoc
-// cat < Makefile > out -> bad file descriptor
