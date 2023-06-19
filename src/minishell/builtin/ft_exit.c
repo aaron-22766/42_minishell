@@ -7,6 +7,8 @@ int	ft_is_num(char *argv)
 	i = 0;
 	while (argv[i] != '\0')
 	{
+		if (argv[i] == '-' || argv[i] == '+')
+			i++;
 		if (!ft_isdigit(argv[i]))
 			return (0);
 		i++;
@@ -25,8 +27,6 @@ void	ft_exit(t_cmds *command)
 	int	i;
 
 	i = 0;
-	if (!command->argv[0])
-		exit(0);
 	while (command->argv[i])
 		i++;
 	if (i > 2)
@@ -42,9 +42,11 @@ void	ft_exit(t_cmds *command)
 		}
 		else
 		{
-			printf("exit\nminishell: exit: need numeric argument\n");
+			printf("exit\nminishell: exit: %s: need numeric argument\n",
+				command->argv[1]);
 			ft_free_commands(command);
 			exit(255);
 		}
 	}
+	ft_free_exit(command);
 }

@@ -5,13 +5,13 @@ int	ft_unset_inv(char *str)
 	int	i;
 
 	i = 0;
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (1);
 	while (str[i] != '\0')
 	{
-		if (ft_strchr(str, '?') || ft_strchr(str, '$') || ft_strchr(str, '%')
-			|| ft_strchr(str, '-') || ft_strchr(str, '=')
-			|| ft_strchr(str, '/'))
-			return (1);
-		if (ft_isdigit(str[i]))
+		if (ft_strchr(str, '?') || ft_strchr(str, '%') || ft_strchr(str, '/')
+			|| ft_strchr(str, '-') || ft_strchr(str, '+')
+			|| ft_strchr(str, '='))
 			return (1);
 		i++;
 	}
@@ -20,29 +20,21 @@ int	ft_unset_inv(char *str)
 
 void	ft_unset(t_cmds *command)
 {
-	int			i;
+	int	i;
 
 	i = 0;
-	while (command->argv[i])
+	while (command->argv[i] && i >= 0)
 		i++;
-	if (i > 1)
-	{
-		printf("minishell: unset: use it without options\n");
-		ft_free_commands(command);
-		exit(1);
-	}
-	if (i == 1)
+	i--;
+	while (i >= 0)
 	{
 		if (!ft_unset_inv(command->argv[i]))
 			ft_unsetenv(command->argv[i]);
 		else
 		{
-			printf("minishell: unset: not a valid identifier\n");
-			ft_free_commands(command);
-			exit(1);
+			printf("minishell: unset: %s not a valid identifier\n",
+				command->argv[i]);
 		}
-		i++;
+		i--;
 	}
-	ft_free_commands(command);
-	exit(0);
 }

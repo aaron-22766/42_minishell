@@ -1,18 +1,22 @@
 #include "../../../include/minishell/builtin.h"
 
-void	ft_pwd(t_cmds *command)
+int	ft_pwd(t_cmds *command)
 {
 	char	*pwd;
 
 	pwd = NULL;
-	if (command->argv[0])
+	if ((command->argv[0] && !command->argv[1])
+		|| (command->argv[0] && command->argv[1][0] != '-'))
 	{
 		pwd = getcwd(NULL, 0);
+		if (!pwd)
+		{
+			ft_perror_builtin("cd", ERR_ERRNO, "getcwd failed");
+			return (1);
+		}
 		printf("%s\n", pwd);
+		free(pwd);
 	}
 	else
 		printf("minishell: pwd: no options available\n");
-	ft_free_commands(command);
-	free(pwd);
-	exit(0);
 }
