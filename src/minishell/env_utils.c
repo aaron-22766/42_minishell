@@ -13,19 +13,25 @@ size_t	ft_environ_size(void)
 
 char	ft_is_env_var(const char *var1, const char *var2, size_t name_len)
 {
-	if (!var1 || name_len < 1 || ft_strlen(var1) < name_len + 2)
+	char	last;
+
+	if (!var1 || name_len < 1)
 		return (false);
-	return (!ft_strncmp(var1, var2, name_len) && var1[name_len] == '=');
+	last = ft_strncmp(var1, var2, name_len);
+	return (last == '\0' || ft_abs(last) == '=');
 }
 
-int	ft_existing_env_var(const char *var, size_t name_len)
+int	ft_existing_env_var(const char *var, ssize_t name_len)
 {
 	extern char	**environ;
 	int			existing;
 	int			i;
 
-	if (!var || name_len < 3)
+	if (!var || (name_len > 0 && name_len < 3))
 		return (-1);
+	if (name_len == -1)
+		name_len = ft_strlen(var);
+	name_len++;
 	existing = -1;
 	i = -1;
 	while (environ[++i])

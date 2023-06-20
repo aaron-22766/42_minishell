@@ -26,6 +26,7 @@ static t_cmds	*ft_new_cmd(size_t argvs)
 	new->io_red = NULL;
 	new->fd_in = STDIN_FILENO;
 	new->fd_out = STDOUT_FILENO;
+	new->builtin = B_NO;
 	new->next = NULL;
 	if (argvs)
 		new->argv = ft_calloc(argvs + 1, sizeof(char *));

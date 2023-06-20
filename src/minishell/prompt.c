@@ -89,7 +89,7 @@ char	*ft_expand_prompt(char *prompt)
 	char	*val;
 
 	if (!prompt)
-		return (ft_strdup(""));
+		prompt = ft_strdup("\\h:\\W \\u$ ");
 	prompt = ft_strdup(prompt);
 	if (prompt)
 		backslash = ft_next_escape(prompt, 0);

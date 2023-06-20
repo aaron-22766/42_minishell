@@ -20,7 +20,7 @@
 void	ft_init_shell(char *ms_path);
 
 // run_shell.c
-int		ft_run_shell(unsigned char status);
+int		ft_run_shell(int status);
 
 // prompt.c
 char	*ft_expand_prompt(char *prompt);
@@ -33,7 +33,7 @@ int		ft_unsetenv(const char *name);
 // env_utils.c
 size_t	ft_environ_size(void);
 char	ft_is_env_var(const char *var1, const char *var2, size_t name_len);
-int		ft_existing_env_var(const char *var, size_t name_len);
+int		ft_existing_env_var(const char *var, ssize_t name_len);
 void	ft_print_environ(void);
 void	ft_free_environ(void);
 

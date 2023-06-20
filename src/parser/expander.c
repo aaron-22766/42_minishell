@@ -38,7 +38,7 @@ static void	ft_expand_assignment_tilde(char **content)
 		ft_expand_tilde(content, i + 1);
 }
 
-static char	ft_replace_var(unsigned char status, char id, char **content,
+static char	ft_replace_var(int status, char id, char **content,
 			size_t var[2])
 {
 	char	*val;
@@ -66,7 +66,7 @@ static char	ft_replace_var(unsigned char status, char id, char **content,
 	return (RETURN_SUCCESS);
 }
 
-char	ft_expand_env_vars(unsigned char status, char **content, char *quotes,
+char	ft_expand_env_vars(int status, char **content, char *quotes,
 		char id)
 {
 	size_t	var[2];
@@ -95,7 +95,7 @@ char	ft_expand_env_vars(unsigned char status, char **content, char *quotes,
 	return (RETURN_SUCCESS);
 }
 
-char	ft_expand_tokens(unsigned char status, t_tokens **tokens)
+char	ft_expand_tokens(int status, t_tokens **tokens)
 {
 	t_tokens	*current;
 	char		ret;

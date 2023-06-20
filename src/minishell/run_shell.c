@@ -1,21 +1,11 @@
 #include "../../include/minishell/minishell.h"
 
-static void	ft_welcome_shell(void)
-{
-	printf("\n*****************************************\n");
-	printf("*\t\t\t\t\t*\n");
-	printf("*\t\t\e[1;34mMINISHELL\e[0m\t\t*\n");
-	printf("*\t\t\t\t\t*\n");
-	printf("*\tby @arabenst & @rhortens\t*\n");
-	printf("*\t\t\t\t\t*\n");
-	printf("*****************************************\n");
-	printf("current user is: \e[1;32m@%s\e[0m\n\n", getenv("USER"));
-}
-
 static char	ft_only_space(char *line)
 {
 	size_t	i;
 
+	if (!line)
+		return (false);
 	i = -1;
 	while (line[++i])
 		if (!ft_isspace(line[i]))
@@ -23,7 +13,7 @@ static char	ft_only_space(char *line)
 	return (true);
 }
 
-static char	*ft_get_prompt(char *prompt, unsigned char status, char execute)
+static char	*ft_get_prompt(char *prompt, int status, char execute)
 {
 	char	*new;
 
@@ -42,26 +32,26 @@ static char	*ft_get_prompt(char *prompt, unsigned char status, char execute)
 	return (new);
 }
 
-int	ft_run_shell(unsigned char status)
+int	ft_run_shell(int status)
 {
 	char	execute;
 	char	*prompt;
 	char	*line;
 
 	execute = 0;
-	ft_welcome_shell();
 	while (true)
 	{
+		g_ctrlc = false;
 		prompt = ft_get_prompt(getenv("PS1"), status, execute);
 		signal(SIGINT, ft_readline_handler);
 		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
 		if (!line && rl_eof_found)
 			return (ft_printf("\e[A\e[K%sexit\n", prompt), free(prompt), 0);
-		else if (!line)
-			ft_perror(ERR_ERRNO, "readline");
 		free(prompt);
-		if (line[0])
+		if (!line)
+			status = ft_perror(ERR_ERRNO, "readline");
+		if (line && line[0])
 			add_history(line);
 		execute = !ft_only_space(line);
 		if (execute)

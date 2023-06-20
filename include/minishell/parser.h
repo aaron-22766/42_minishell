@@ -25,6 +25,7 @@ typedef struct s_cmds
 	t_tokens		*io_red;
 	int				fd_in;
 	int				fd_out;
+	char			builtin;
 	struct s_cmds	*next;
 }	t_cmds;
 
@@ -33,11 +34,11 @@ typedef struct s_cmds
 /* ************************************************************************** */
 
 // parse.c
-t_cmds		*ft_parse(unsigned char status, t_tokens *tokens);
+t_cmds		*ft_parse(int status, t_tokens *tokens);
 
 // expander.c
-char		ft_expand_tokens(unsigned char status, t_tokens **tokens);
-char		ft_expand_env_vars(unsigned char status, char **content,
+char		ft_expand_tokens(int status, t_tokens **tokens);
+char		ft_expand_env_vars(int status, char **content,
 				char *quotes, char id);
 
 // expander_utils.c

@@ -9,27 +9,17 @@
 # include "minishell.h"
 # include "parser.h"
 
-/* ************************************************************************** */
-/*                                  DEFINES                                   */
-/* ************************************************************************** */
+// builtin.c
+void	ft_check_builtin(t_cmds *cmd);
+int		ft_run_builtin(t_cmds *cmd, t_cmds *commands);
 
-/* ************************************************************************** */
-/*                                  STRUCTS                                   */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                 FUNCTIONS                                  */
-/* ************************************************************************** */
-
-// builtins
-int		ft_check_builtin_parent(t_cmds *command);
-int		ft_check_builtin_child(t_cmds *command);
-int		ft_cd(t_cmds *command);
-void	ft_echo(t_cmds *command);
-void	ft_env(t_cmds *command);
-void	ft_exit(t_cmds *command);
-void	ft_export(t_cmds *command);
-int		ft_pwd(t_cmds *command);
-void	ft_unset(t_cmds *command);
+// corresponding file
+int		ft_cd(t_cmds *cmd);
+int		ft_echo(t_cmds *cmd);
+int		ft_env(t_cmds *cmd);
+int		ft_exit(t_cmds *cmd, t_cmds *commands);
+int		ft_export(t_cmds *cmd);
+int		ft_pwd(t_cmds *cmd);
+int		ft_unset(t_cmds *cmd);
 
 #endif

@@ -1,40 +1,20 @@
 #include "../../include/minishell/executor.h"
 
-static char	*ft_find_path(char *name)
+static void	ft_execute_child(int status, t_cmds *cmd)
 {
-	(void)name;
-	return (ft_strdup("/bin/echo"));
-}
+	extern char	**environ;
 
-static void	ft_execute_child(unsigned char status, t_cmds *cmd,
-			t_cmds *commands)
-{
-	signal(SIGINT, ft_sig_handler);//?
 	if (ft_install_redirections(status, cmd) == RETURN_FAILURE)
-	{
-		ft_free_cmds(commands);
 		exit(EXIT_FAILURE);
-	}
-	// ft_try_builtin(cmd->argv, commands);
-	cmd->path = ft_find_path(cmd->argv[0]);
-	if (!cmd->path)
-	{
-		ft_free_cmds(commands);
-		exit(EXIT_FAILURE);
-	}
+	ft_run_builtin(cmd, NULL);
 	if (g_ctrlc == true)
-	{
-		ft_free_cmds(commands);
 		exit(130);
-	}
-	execve(cmd->path, cmd->argv, NULL);
+	execve(cmd->path, cmd->argv, environ);
 	ft_perror(ERR_ERRNO, "failed to execute command");
-	ft_free_cmds(commands);
 	exit(EXIT_FAILURE);
 }
 
-unsigned char	ft_create_child(unsigned char status, t_cmds *cmd,
-				t_cmds *commands)
+int	ft_create_child(int status, t_cmds *cmd)
 {
 	pid_t	pid;
 	int		wait_status;
@@ -45,12 +25,13 @@ unsigned char	ft_create_child(unsigned char status, t_cmds *cmd,
 	if (pid < 0)
 		return (ft_perror(ERR_ERRNO, "fork failed"), RETURN_FAILURE);
 	if (pid == 0)
-		ft_execute_child(status, cmd, commands);
+		ft_execute_child(status, cmd);
 	else
 	{
-		signal(SIGINT, SIG_IGN);
 		if (waitpid(pid, &wait_status, 0) == -1)
 			ft_perror(ERR_ERRNO, "waiting for child process failed");
+		if (g_ctrlc == true)
+			return (printf("\n"), 130);
 		return (WEXITSTATUS(wait_status));
 	}
 	return (RETURN_FAILURE);

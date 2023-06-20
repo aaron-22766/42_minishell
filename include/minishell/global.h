@@ -12,6 +12,7 @@
 # include <string.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <errno.h>
 # include <dirent.h>
 # include <termios.h>
 # include <curses.h>
@@ -35,9 +36,24 @@ enum e_return
 enum e_errors
 {
 	ERR_ERRNO,
-	ERR_MEM,
-	ERR_TOKEN_SYNTAX,
-	ERR_AMBIG_RED
+	ERR_NOT_SET = -1,
+	ERR_MEM = 12,
+	ERR_TOKEN_SYNTAX = 258,
+	ERR_AMBIG_RED = 1,
+	ERR_CMD_NOT_FOUND = 127,
+	ERR_NO_FILE = -2
+};
+
+enum e_builtins
+{
+	B_NO,
+	B_ECHO,
+	B_CD,
+	B_PWD,
+	B_EXPORT,
+	B_UNSET,
+	B_ENV,
+	B_EXIT
 };
 
 /* ************************************************************************** */
@@ -56,8 +72,8 @@ void	ft_readline_handler(int sig);
 void	ft_sig_handler(int sig);
 
 // error.c
-void	ft_perror(int err, char *context);
-void	ft_perror_builtin(char *builtin, int err, char *context);
-void	ft_perror_exe(char *exe, int err, char *context);
+int		ft_perror(int err, char *context);
+int		ft_perror_builtin(char *builtin, int err, char *context);
+int		ft_perror_exe(char *exe, int err, char *context);
 
 #endif

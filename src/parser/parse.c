@@ -24,7 +24,7 @@ static void	ft_remove_quotes(t_tokens *tokens)
 	}
 }
 
-t_cmds	*ft_parse(unsigned char status, t_tokens *tokens)
+t_cmds	*ft_parse(int status, t_tokens *tokens)
 {
 	t_cmds	*commands;
 

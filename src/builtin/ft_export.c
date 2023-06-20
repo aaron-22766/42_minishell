@@ -1,6 +1,6 @@
-#include "../../../include/minishell/builtin.h"
+#include "../../include/minishell/builtin.h"
 
-int	is_sorted(char **env)
+static int	is_sorted(char **env)
 {
 	int		i;
 	int		j;
@@ -18,7 +18,7 @@ int	is_sorted(char **env)
 	return (1);
 }
 
-char	**ft_sort_env(void)
+static char	**ft_sort_env(void)
 {
 	extern char	**environ;
 	char		*tmp;
@@ -45,7 +45,7 @@ char	**ft_sort_env(void)
 	return (environ);
 }
 
-void	ft_print_exp(char **env_sort)
+static void	ft_print_exp(char **env_sort)
 {
 	char		*equal;
 	int			i;
@@ -67,41 +67,26 @@ void	ft_print_exp(char **env_sort)
 	}
 }
 
-int	ft_check_var(t_cmds *command, char *cmd)
+int	ft_export(t_cmds *cmd)
 {
+	int	status;
 	int	i;
 
-	(void) command;
-	i = 0;
-	if (!ft_isalpha(cmd[i]) && cmd[i] != '_')
-	{
-		printf("minishell: export: '%s': not a valid identifier\n", cmd);
-		return (-1);
-	}
-	while (cmd[i] && cmd[i] != '=')
-		i++;
-	if (cmd[i] == '=')
-	{
-		if (cmd[i + 1] == '\0')
-			return (0);
-		return (0);
-	}
-	return (0);
-}
-
-void	ft_export(t_cmds *command)
-{
-	int	i;
-	int	check_exp;
-
+	status = 0;
 	i = 1;
-	if (!command->argv[i])
+	if (!cmd->argv[i])
 		ft_print_exp(ft_sort_env());
-	while (command->argv[i])
+	while (cmd->argv[i])
 	{
-		check_exp = ft_check_var(command, command->argv[i]);
-		if (check_exp != -1)
-			ft_putenv(command->argv[i]);
+		if (!ft_isalpha(cmd->argv[i][0]) && cmd->argv[i][0] != '_')
+		{
+			ft_eprintf("minishell: export: `%s': not a valid identifier\n",
+				cmd->argv[i]);
+			status = 1;
+		}
+		else
+			ft_putenv(cmd->argv[i]);
 		i++;
 	}
+	return (status);
 }

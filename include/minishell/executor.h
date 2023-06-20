@@ -7,19 +7,19 @@
 
 # include "global.h"
 # include "parser.h"
+# include "builtin.h"
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
 // execute.c
-unsigned char	ft_execute(unsigned char status, t_cmds *commands);
+int		ft_execute(int status, t_cmds *commands);
 
 // child.c
-unsigned char	ft_create_child(unsigned char status, t_cmds *cmd,
-					t_cmds *commands);
+int		ft_create_child(int status, t_cmds *cmd);
 
 // redirections.c
-char			ft_install_redirections(unsigned char status, t_cmds *command);
+char	ft_install_redirections(int status, t_cmds *command);
 
 #endif

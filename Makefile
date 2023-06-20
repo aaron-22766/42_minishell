@@ -2,7 +2,7 @@ NAME		=	minishell
 
 INCDIR		=	./include/minishell
 SRCDIR		=	./src
-SUBDIRNAMES	=	minishell lexer parser evaluator executor
+SUBDIRNAMES	=	minishell lexer parser builtin executor
 SUBDIRS		=	$(foreach name, $(SUBDIRNAMES), $(SRCDIR)/$(name))
 OBJDIR		=	./obj
 
@@ -14,7 +14,7 @@ OBJS		=	$(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 #                               REMOVE WILDCARD                                #
 # **************************************************************************** #
 
-CC			=	gcc
+CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
 LDFLAGS		=	-lreadline -L $(HOME)/.brew/opt/readline/lib
 INCFLAGS	=	-I $(HOME)/.brew/opt/readline/include -I $(INCDIR)

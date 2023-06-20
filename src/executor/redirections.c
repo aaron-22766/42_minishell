@@ -34,7 +34,7 @@ static int	ft_heredoc(unsigned char status, char *eof)
 	}
 }
 
-static char	ft_set_redirection(unsigned char status, t_tokens *red, t_cmds *cmd)
+static char	ft_set_redirection(int status, t_tokens *red, t_cmds *cmd)
 {
 	int	fd;
 
@@ -63,7 +63,7 @@ static char	ft_set_redirection(unsigned char status, t_tokens *red, t_cmds *cmd)
 	return (RETURN_SUCCESS);
 }
 
-char	ft_install_redirections(unsigned char status, t_cmds *cmd)
+char	ft_install_redirections(int status, t_cmds *cmd)
 {
 	t_tokens	*red;
 

@@ -68,9 +68,11 @@ int	ft_putenv(char *string)
 	char		*new_var;
 	int			existing;
 
-	if (!environ || !string || !ft_strchr(string, '='))
+	if (!environ || !string)
 		return (-1);
 	existing = ft_existing_env_var(string, ft_strchr_index(string, '='));
+	if (existing != -1 && !ft_strchr(string, '='))
+		return (0);
 	new_var = ft_strdup(string);
 	if (!new_var)
 		return (-1);

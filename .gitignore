@@ -5,3 +5,4 @@
 !include
 !include/**
 !.gitignore
+.DS_Store
