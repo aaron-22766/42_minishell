@@ -19,4 +19,5 @@ int	ft_pwd(t_cmds *command)
 	}
 	else
 		printf("minishell: pwd: no options available\n");
+	return (0);
 }
