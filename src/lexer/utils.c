@@ -49,34 +49,36 @@ size_t	ft_unquoted_char(char *str, const char *chars, const char *quotes)
 }
 
 // remove on final
-t_tokens	*print_tokens(t_tokens *tokens)
+t_tokens	*print_tokens(t_tokens *tokens, const char *title)
 {
+	if (title)
+		printf("\e[1;33m%s\e[0m\n", title);
 	if (!tokens)
 		printf("No tokens\n");
 	while (tokens)
 	{
 		if (tokens->id == WORD)
 			printf("[WORD] ");
-		else if (tokens->id == OPERATOR)
-			printf("[OPERATOR] ");
-		else if (tokens->id == WORD)
-			printf("[WORD] ");
-		else if (tokens->id == COMMAND)
-			printf("[COMMAND] ");
-		else if (tokens->id == FILE_NAME)
-			printf("[FILE_NAME] ");
+		else if (tokens->id == IN_FILE)
+			printf("[IN_FILE] ");
+		else if (tokens->id == OUT_FILE)
+			printf("[OUT_FILE] ");
 		else if (tokens->id == HEREDOC_EOF)
 			printf("[HEREDOC_EOF] ");
+		else if (tokens->id == OUT_A_FILE)
+			printf("[OUT_A_FILE] ");
+		else if (tokens->id == COMMAND)
+			printf("[COMMAND] ");
 		else if (tokens->id == OPERATOR)
 			printf("[OPERATOR] ");
-		else if (tokens->id == I_RED)
-			printf("[I_RED] ");
-		else if (tokens->id == O_RED)
-			printf("[O_RED] ");
-		else if (tokens->id == O_RED_A)
-			printf("[O_RED_A] ");
+		else if (tokens->id == IN_RED)
+			printf("[IN_RED] ");
+		else if (tokens->id == OUT_RED)
+			printf("[OUT_RED] ");
 		else if (tokens->id == HEREDOC)
 			printf("[HEREDOC] ");
+		else if (tokens->id == OUT_A_RED)
+			printf("[OUT_A_RED] ");
 		else if (tokens->id == PIPE)
 			printf("[PIPE] ");
 		printf("[%s]\n", tokens->content);

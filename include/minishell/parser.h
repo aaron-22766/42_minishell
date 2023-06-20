@@ -1,61 +1,57 @@
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef PARSER_H
+# define PARSER_H
 
 /* ************************************************************************** */
 /*                                  INCLUDES                                  */
 /* ************************************************************************** */
 
 # include "global.h"
+# include "lexer.h"
 
 /* ************************************************************************** */
-/*                                   ENUMS                                    */
+/*                                  DEFINES                                   */
 /* ************************************************************************** */
 
-enum e_token_identifier
-{
-	WORD = 0b00000001,
-	IN_FILE = 0b00000101,
-	OUT_FILE = 0b00001001,
-	HEREDOC_EOF = 0b00010001,
-	OUT_A_FILE = 0b00100001,
-	COMMAND = 0b01000001,
-	OPERATOR = 0b00000010,
-	IN_RED = 0b00000110,
-	OUT_RED = 0b00001010,
-	HEREDOC = 0b00010010,
-	OUT_A_RED = 0b00100010,
-	PIPE = 0b01000010
-};
+# define RMV -1
 
 /* ************************************************************************** */
 /*                                  STRUCTS                                   */
 /* ************************************************************************** */
 
-typedef struct s_tokens
+typedef struct s_cmds
 {
-	char			id;
-	char			*content;
-	struct s_tokens	*next;
-}	t_tokens;
+	char			*path;
+	char			**argv;
+	t_tokens		*io_red;
+	int				fd_in;
+	int				fd_out;
+	struct s_cmds	*next;
+}	t_cmds;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
-// lex.c
-t_tokens	*ft_lex(char *line);
+// parse.c
+t_cmds		*ft_parse(unsigned char status, t_tokens *tokens);
 
-// split.c
-char		ft_split_at_operators(t_tokens *token);
+// expander.c
+char		ft_expand_tokens(unsigned char status, t_tokens **tokens);
+char		ft_expand_env_vars(unsigned char status, char **content,
+				char *quotes, char id);
 
-// evaluate.c
-char		ft_evaluate_tokens(t_tokens *tokens);
-void		ft_evaluate_commands(t_tokens *tokens);
+// expander_utils.c
+ssize_t		ft_setchar(char *str, char c, ssize_t index);
+t_tokens	*ft_remove_token(t_tokens **head, t_tokens *remove);
+
+// commands.c
+t_cmds		*ft_create_commands(t_tokens *tokens);
+
+// allocate_table.c
+t_cmds		*ft_allocate_command_table(t_tokens *tokens);
 
 // utils.c
-t_tokens	*ft_new_token(char *content);
-void		ft_free_tokens(t_tokens *tokens);
-size_t		ft_unquoted_char(char *str, const char *chars, const char *quotes);
-t_tokens	*print_tokens(t_tokens *tokens, const char *title);
+void		ft_free_cmds(t_cmds *commands);
+void		print_cmds(t_cmds *commands);
 
 #endif

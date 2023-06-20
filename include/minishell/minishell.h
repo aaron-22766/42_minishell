@@ -5,64 +5,10 @@
 /*                                  INCLUDES                                  */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <stdbool.h>
-# include <string.h>
-# include <signal.h>
-# include <fcntl.h>
-# include <dirent.h>
-# include <termios.h>
-# include <curses.h>
-# include <term.h>
-# include <sys/stat.h>
-# include <sys/ioctl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "../../libft/libft.h"
+# include "global.h"
 # include "lexer.h"
-
-/* ************************************************************************** */
-/*                                  DEFINES                                   */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                   ENUMS                                    */
-/* ************************************************************************** */
-
-enum e_return
-{
-	RETURN_SUCCESS,
-	RETURN_FAILURE
-};
-
-enum e_errors
-{
-	ERR_ERRNO,
-	ERR_MEM,
-	ERR_TOKEN_SYNTAX
-};
-
-/* ************************************************************************** */
-/*                                  STRUCTS                                   */
-/* ************************************************************************** */
-
-typedef struct s_cmds
-{
-	char			*path;
-	char			**argv;
-	int				in_fd;
-	int				out_fd;
-	struct s_cmds	*next;
-}	t_cmds;
-
-/* ************************************************************************** */
-/*                              GLOBAL VARIABLE                               */
-/* ************************************************************************** */
-
-bool	verbose;
-// pid_t	g_child_pid;
+# include "parser.h"
+# include "executor.h"
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
@@ -71,10 +17,13 @@ bool	verbose;
 // minishell.c
 
 // init_shell.c
-void	ft_init_shell(void);
+void	ft_init_shell(char *ms_path);
 
 // run_shell.c
-void	ft_run_shell(void);
+int		ft_run_shell(unsigned char status);
+
+// prompt.c
+char	*ft_expand_prompt(char *prompt);
 
 // env_funcs.c
 int		ft_setenv(const char *name, const char *value, int overwrite);
@@ -90,9 +39,5 @@ void	ft_free_environ(void);
 
 // free.c
 void	ft_free_commands(t_cmds *commands);
-
-// error.c
-void	ft_perror(int err, char *context);
-void	ft_perror_exe(char *exe, int err, char *context);
 
 #endif

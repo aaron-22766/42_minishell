@@ -47,21 +47,12 @@ static t_tokens	*ft_get_tokens(char *line)
 t_tokens	*ft_lex(char *line)
 {
 	t_tokens	*tokens;
-	char		*err_context;
 
 	tokens = ft_get_tokens(line);
 	free(line);
 	if (!tokens || ft_split_at_operators(tokens) == RETURN_FAILURE)
 		return (ft_free_tokens(tokens), NULL);
-	ft_evaluate_tokens(tokens);
-	err_context = ft_check_syntax(tokens);
-	if (err_context)
-		return (ft_perror(ERR_TOKEN_SYNTAX, err_context),
-			ft_free_tokens(tokens), NULL);
-	if (verbose)
-	{
-		printf("\033[1;33mTOKENS\033[0m\n");
-		print_tokens(tokens);
-	}
+	if (ft_evaluate_tokens(tokens) == RETURN_FAILURE)
+		return (ft_free_tokens(tokens), NULL);
 	return (tokens);
 }

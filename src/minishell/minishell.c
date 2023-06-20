@@ -1,15 +1,5 @@
 #include "../../include/minishell/minishell.h"
 
-static void	ft_sighandler(int sig)
-{
-	(void)sig;
-	printf("\n");
-	rl_on_new_line();
-	rl_redisplay();
-	rl_replace_line("", 0);
-	// kill current child execution
-}
-
 static void	ft_set_verbose(int argc, char **argv)
 {
 	int	i;
@@ -32,11 +22,9 @@ static void	ft_configure_terminal(void)
 
 int	main(int argc, char **argv)
 {
-	signal(SIGINT, &ft_sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	ft_set_verbose(argc, argv);
-	ft_init_shell();
+	ft_init_shell(argv[0]);
 	ft_configure_terminal();
-	ft_run_shell();
-	return (-1);
+	return (ft_run_shell(0));
 }
