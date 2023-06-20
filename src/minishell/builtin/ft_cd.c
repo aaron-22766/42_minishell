@@ -40,6 +40,11 @@ int	ft_cd_path(t_cmds *command, char *pwd)
 		return (1);
 	}
 	pwd_new = getcwd(NULL, 0);
+	if (!pwd_new)
+	{
+		ft_perror_builtin("cd", ERR_ERRNO, "getcwd failed");
+		return (1);
+	}
 	ft_setenv("OLDPWD", pwd, 1);
 	ft_setenv("PWD", pwd_new, 1);
 	return (0);
