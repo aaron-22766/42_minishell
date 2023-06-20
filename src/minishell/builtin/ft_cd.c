@@ -9,7 +9,7 @@ int	ft_dot_hyphen(char *pwd, char *c)
 		if (chdir("..") != 0)
 		{
 			ft_perror_builtin("cd", ERR_ERRNO, "chdir failed");
-			return (free(pwd, 1));
+			return (free(pwd), 1);
 		}
 		ft_setenv("OLDPWD", pwd, 1);
 		ft_setenv("PWD", getcwd(NULL, 0), 1);
@@ -21,7 +21,7 @@ int	ft_dot_hyphen(char *pwd, char *c)
 		if (chdir(pwd_new) != 0)
 		{
 			ft_perror_builtin("cd", ERR_ERRNO, "chdir failed");
-			return (free(pwd, 1));
+			return (free(pwd), 1);
 		}
 		ft_setenv("OLDPWD", pwd, 1);
 		ft_setenv("PWD", pwd_new, 1);
