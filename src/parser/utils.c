@@ -13,10 +13,6 @@ void	ft_free_cmds(t_cmds *commands)
 			free(commands->argv[i]);
 		free(commands->argv);
 		ft_free_tokens(commands->io_red);
-		if (commands->fd_in != STDIN_FILENO)
-			close(commands->fd_in);
-		if (commands->fd_out != STDOUT_FILENO)
-			close(commands->fd_out);
 		next = commands->next;
 		free(commands);
 		commands = next;

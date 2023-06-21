@@ -20,7 +20,7 @@
 void	ft_init_shell(char *ms_path);
 
 // run_shell.c
-int		ft_run_shell(int status);
+int		ft_run_shell(int status, char execute);
 
 // prompt.c
 char	*ft_expand_prompt(char *prompt);

@@ -39,5 +39,5 @@ int	main(int argc, char **argv)
 	ft_init_shell(argv[0]);
 	ft_configure_terminal();
 	ft_welcome_shell();
-	return (ft_run_shell(0));
+	return (ft_run_shell(0, 0));
 }

@@ -4,8 +4,7 @@ static size_t	ft_next_escape(char *prompt, size_t prev)
 {
 	while (prompt[prev])
 	{
-		if (prompt[prev] == '\\'
-			&& ft_strchr("aehHlnrsuwW\\[]", prompt[prev + 1]))
+		if (prompt[prev] == '\\')
 			return (prev);
 		prev++;
 	}
@@ -89,8 +88,9 @@ char	*ft_expand_prompt(char *prompt)
 	char	*val;
 
 	if (!prompt)
-		prompt = ft_strdup("\\h:\\W \\u$ ");
-	prompt = ft_strdup(prompt);
+		prompt = ft_strdup("\\h:\\W \\u\\$ ");
+	else
+		prompt = ft_strdup(prompt);
 	if (prompt)
 		backslash = ft_next_escape(prompt, 0);
 	while (prompt && prompt[backslash])
