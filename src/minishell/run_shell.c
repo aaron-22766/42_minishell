@@ -45,19 +45,27 @@ int	ft_run_shell(int status, char execute)
 {
 	char	*prompt;
 	char	*line;
+	char	*tester;
 
 	while (true)
 	{
 		g_ctrlc = false;
 		prompt = ft_get_prompt(status, execute);
 		signal(SIGINT, ft_readline_handler);
-		line = readline(prompt);
+		if (isatty(fileno(stdin)))
+			line = readline(prompt);
+		else
+		{
+			tester = get_next_line(fileno(stdin));
+			line = ft_strtrim(tester, "\n");
+			free(tester);
+		}
 		signal(SIGINT, ft_sig_handler);
-		if (!line && rl_eof_found)
-			return (ft_printf("%sexit\n", prompt), free(prompt), 0);
+		if (!line/* && rl_eof_found*/)
+			return (/*ft_printf("%sexit\n", prompt), */free(prompt), 0);
 		free(prompt);
-		if (!line)
-			status = ft_perror(ERR_ERRNO, "readline");
+		// if (!line)
+		// 	return (ft_perror(ERR_ERRNO, "readline"));
 		if (line && line[0])
 			add_history(line);
 		execute = !ft_only_space(line);

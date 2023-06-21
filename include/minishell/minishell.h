@@ -37,7 +37,4 @@ int		ft_existing_env_var(const char *var, ssize_t name_len);
 void	ft_print_environ(void);
 void	ft_free_environ(void);
 
-// free.c
-void	ft_free_commands(t_cmds *commands);
-
 #endif

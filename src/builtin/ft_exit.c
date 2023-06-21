@@ -18,7 +18,7 @@ static int	ft_is_num(char *argv)
 
 static void	ft_free_exit(t_cmds *cmd, int code)
 {
-	ft_free_commands(cmd);
+	ft_free_cmds(cmd);
 	exit(code);
 }
 
@@ -33,7 +33,7 @@ int	ft_exit(t_cmds *cmd)
 		return (ft_eprintf("exit\nminishell: exit: too many arguments\n"));
 	if (!cmd->argv[1])
 		ft_free_exit(cmd, 0);
-	printf("exit\n");
+	ft_eprintf("exit\n");
 	if (ft_is_num(cmd->argv[1]))
 		ft_free_exit(cmd, ft_atoi(cmd->argv[1]));
 	else
