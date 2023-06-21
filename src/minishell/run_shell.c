@@ -52,14 +52,14 @@ int	ft_run_shell(int status, char execute)
 		g_ctrlc = false;
 		prompt = ft_get_prompt(status, execute);
 		signal(SIGINT, ft_readline_handler);
-		if (isatty(fileno(stdin)))
+		if (isatty(fileno(stdin)))//remove
 			line = readline(prompt);
-		else
-		{
-			tester = get_next_line(fileno(stdin));
-			line = ft_strtrim(tester, "\n");
-			free(tester);
-		}
+		else//remove
+		{//remove
+			tester = get_next_line(fileno(stdin));//remove
+			line = ft_strtrim(tester, "\n");//remove
+			free(tester);//remove
+		}//remove
 		signal(SIGINT, ft_sig_handler);
 		if (!line/* && rl_eof_found*/)
 			return (/*ft_printf("%sexit\n", prompt), */free(prompt), 0);
