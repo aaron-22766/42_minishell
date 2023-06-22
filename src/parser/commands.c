@@ -21,28 +21,28 @@ static void	ft_args_to_table(t_tokens *tokens, t_cmds *command)
 static void	ft_alter_tokens(t_tokens **tokens)
 {
 	t_tokens	*prev;
-	t_tokens	*current;
+	t_tokens	*tok;
 	t_tokens	*next;
 
 	prev = NULL;
-	current = *tokens;
-	while (current)
+	tok = *tokens;
+	while (tok)
 	{
-		next = current->next;
-		if ((current->id & OPERATOR) && current->id != PIPE)
-			free(current->content);
-		if (((current->id & OPERATOR) && current->id != PIPE)
-			|| current->id == COMMAND || current->id == WORD)
+		next = tok->next;
+		if ((tok->id & OPERATOR) && tok->id != PIPE)
+			free(tok->content);
+		if (((tok->id & OPERATOR) && tok->id != PIPE)
+			|| tok->id == COMMAND || tok->id == WORD)
 		{
-			free(current);
+			free(tok);
 			if (prev)
 				prev->next = next;
 			else
 				*tokens = next;
 		}
 		else
-			prev = current;
-		current = next;
+			prev = tok;
+		tok = next;
 	}
 }
 

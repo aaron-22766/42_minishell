@@ -27,11 +27,11 @@ static char	*ft_get_prompt(int status, char execute)
 		prompt = "";
 	}
 	if (!execute)
-		ft_asprintf(&new, "\e[30;1m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", GRAY_INCIDATOR, prompt);
 	else if (status)
-		ft_asprintf(&new, "\e[1;31m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", RED_INCIDATOR, prompt);
 	else
-		ft_asprintf(&new, "\e[1;32m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", GREEN_INCIDATOR, prompt);
 	if (!new && malloced == true)
 		return (prompt);
 	if (!new)
@@ -45,7 +45,6 @@ int	ft_run_shell(int status, char execute)
 {
 	char	*prompt;
 	char	*line;
-	char	*tester;
 
 	while (true)
 	{
@@ -56,7 +55,7 @@ int	ft_run_shell(int status, char execute)
 			line = readline(prompt);
 		else//remove
 		{//remove
-			tester = get_next_line(fileno(stdin));//remove
+			char *tester = get_next_line(fileno(stdin));//remove
 			line = ft_strtrim(tester, "\n");//remove
 			free(tester);//remove
 		}//remove

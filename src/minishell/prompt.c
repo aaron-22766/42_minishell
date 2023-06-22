@@ -63,8 +63,10 @@ static char	*ft_complex_value(char esc)
 
 static char	*ft_escape_value(char esc)
 {
-	if (ft_strchr("[]", esc))
-		return (ft_strdup(""));
+	if (esc == '[')
+		return (ft_substr("\001", 0, 1));
+	if (esc == ']')
+		return (ft_substr("\002", 0, 1));
 	if (esc == 'a')
 		return (ft_substr("\a", 0, 1));
 	if (esc == 'e')
