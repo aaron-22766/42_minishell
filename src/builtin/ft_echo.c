@@ -2,24 +2,21 @@
 
 int	ft_echo(t_cmds *cmd)
 {
-	int	i;
-	int	check;
+	int		i;
+	char	nl;
 
 	i = 1;
-	check = 0;
-	if (cmd->argv[i] && !ft_strcmp(cmd->argv[1], "-n"))
-	{
-		check = 1;
+	while (cmd->argv[i] && !ft_strcmp(cmd->argv[i], "-n"))
 		i++;
-	}
+	nl = (i == 1);
 	while (cmd->argv[i])
 	{
 		printf("%s", cmd->argv[i]);
-		if (cmd->argv[i] + 1)
+		if (cmd->argv[i + 1])
 			printf(" ");
 		i++;
 	}
-	if (check == 0)
+	if (nl)
 		printf("\n");
 	exit(0);
 }

@@ -11,7 +11,7 @@
 /*                                   ENUMS                                    */
 /* ************************************************************************** */
 
-enum e_token_identifier
+enum e_token_id
 {
 	WORD = 0b00000001,
 	IN_FILE = 0b00000101,
@@ -43,13 +43,13 @@ typedef struct s_tokens
 /* ************************************************************************** */
 
 // lex.c
-t_tokens	*ft_lex(char *line);
+t_tokens	*ft_lex(int *status, char *line);
 
 // split.c
 char		ft_split_at_operators(t_tokens *token);
 
 // evaluate.c
-char		ft_evaluate_tokens(t_tokens *tokens);
+int			ft_evaluate_tokens(t_tokens *tokens);
 void		ft_evaluate_commands(t_tokens *tokens);
 
 // utils.c

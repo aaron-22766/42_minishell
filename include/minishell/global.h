@@ -39,9 +39,10 @@ enum e_errors
 	ERR_NOT_SET = -1,
 	ERR_MEM = 12,
 	ERR_TOKEN_SYNTAX = 258,
-	ERR_AMBIG_RED = 1,
+	ERR_AMBIG_RED = -2,
+	ERR_IS_DIR = 126,
 	ERR_CMD_NOT_FOUND = 127,
-	ERR_NO_FILE = -2
+	ERR_NO_FILE = -3
 };
 
 enum e_builtins

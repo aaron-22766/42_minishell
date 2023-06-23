@@ -31,17 +31,17 @@ void	ft_check_builtin(t_cmds *cmd)
 
 int	ft_run_builtin(t_cmds *cmd)
 {
+	if (cmd->builtin == B_CD)
+		return (ft_cd(cmd));
 	if (cmd->builtin == B_EXPORT)
 		return (ft_export(cmd));
-	else if (cmd->builtin == B_CD)
-		return (ft_cd(cmd));
 	if (cmd->builtin == B_PWD)
 		return (ft_pwd(cmd));
-	else if (cmd->builtin == B_UNSET)
+	if (cmd->builtin == B_UNSET)
 		return (ft_unset(cmd));
-	else if (cmd->builtin == B_ENV)
+	if (cmd->builtin == B_ENV)
 		return (ft_env(cmd));
-	else if (cmd->builtin == B_ECHO)
+	if (cmd->builtin == B_ECHO)
 		return (ft_echo(cmd));
 	return (EXIT_SUCCESS);
 }

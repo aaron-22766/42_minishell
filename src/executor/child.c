@@ -15,22 +15,26 @@ static void	ft_free_paths(char **paths)
 
 static char	*ft_find_path(char *name)
 {
-	char	**paths;
-	char	*cmd_path;
-	int		i;
+	struct stat	stats;
+	char		**paths;
+	char		*cmd_path;
+	int			i;
 
-	if (ft_strchr(name, '/'))
+	if (!name[0] || !ft_strcmp(name, "."))
+		exit(ft_perror(ERR_CMD_NOT_FOUND, name));
+	if (ft_strchr(name, '/') || !getenv("PATH"))
 	{
-		if (access(name, F_OK) == 0)
-			return (ft_strdup(name));
-		exit(ft_perror(ERR_NO_FILE, name));
+		stat(name, &stats);
+		if (S_ISDIR(stats.st_mode))
+			exit(ft_perror(ERR_IS_DIR, name));
+		return (ft_strdup(name));
 	}
 	paths = ft_split(getenv("PATH"), ':');
 	i = -1;
 	while (paths && paths[++i])
 	{
 		ft_asprintf(&cmd_path, "%s/%s", paths[i], name);
-		if (cmd_path && access(cmd_path, F_OK) == 0)
+		if (cmd_path && access(cmd_path, F_OK | X_OK) == 0)
 			return (ft_free_paths(paths), cmd_path);
 		free(cmd_path);
 	}
@@ -38,24 +42,28 @@ static char	*ft_find_path(char *name)
 	exit(ft_perror(ERR_CMD_NOT_FOUND, name));
 }
 
-static void	ft_execute_child(int status, t_cmds *cmd)
+static void	ft_execute_child(t_cmds *cmd)
 {
 	extern char	**environ;
 
-	if (ft_install_redirections(status, cmd) == RETURN_FAILURE)
-		exit(EXIT_FAILURE);
-	if (!cmd->argv)
-		exit(EXIT_SUCCESS);
+	if (cmd->fd_in != STDIN_FILENO && dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		exit(ft_perror(ERR_ERRNO, "failed to dup stdin"));
+	if (cmd->fd_out != STDOUT_FILENO && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		exit(ft_perror(ERR_ERRNO, "failed to dup stdout"));
 	ft_run_builtin(cmd);
 	cmd->path = ft_find_path(cmd->argv[0]);
 	if (g_ctrlc == true)
 		exit(130);
 	execve(cmd->path, cmd->argv, environ);
-	ft_perror(ERR_ERRNO, "failed to execute command");
-	exit(EXIT_FAILURE);
+	ft_perror(ERR_ERRNO, cmd->argv[0]);
+	if (errno == 2)
+		exit(127);
+	if (errno == 13)
+		exit(126);
+	exit(errno);
 }
 
-int	ft_create_child(int status, t_cmds *cmd)
+int	ft_create_child(t_cmds *cmd)
 {
 	pid_t	pid;
 	int		wait_status;
@@ -66,7 +74,7 @@ int	ft_create_child(int status, t_cmds *cmd)
 	if (pid < 0)
 		return (ft_perror(ERR_ERRNO, "fork failed"), RETURN_FAILURE);
 	if (pid == 0)
-		ft_execute_child(status, cmd);
+		ft_execute_child(cmd);
 	else
 	{
 		if (waitpid(pid, &wait_status, 0) == -1)

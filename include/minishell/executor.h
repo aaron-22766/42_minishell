@@ -17,9 +17,10 @@
 int		ft_execute(int status, t_cmds *commands);
 
 // child.c
-int		ft_create_child(int status, t_cmds *cmd);
+int		ft_create_child(t_cmds *cmd);
 
 // redirections.c
-char	ft_install_redirections(int status, t_cmds *command);
+void	ft_create_redirections(int status, t_cmds *cmd);
+// char	ft_install_redirections(int status, t_cmds *command);
 
 #endif

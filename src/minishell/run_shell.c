@@ -41,6 +41,28 @@ static char	*ft_get_prompt(int status, char execute)
 	return (new);
 }
 
+int	ft_handle_line(int status, char *line)
+{
+	t_tokens	*tokens;
+	t_cmds		*commands;
+
+	tokens = ft_lex(&status, line);
+	if (verbose)
+		print_tokens(tokens, "TOKENS");
+	if (!tokens)
+		return (status);
+	commands = ft_parse(&status, tokens);
+	if (verbose)
+		print_cmds(commands);
+	if (!commands)
+		return (status);
+	if (verbose)
+		printf("\e[1;33mOUTPUT\e[0m\n");
+	ft_unsetenv("LINES");
+	ft_unsetenv("COLUMNS");
+	return (ft_execute(status, commands));
+}
+
 int	ft_run_shell(int status, char execute)
 {
 	char	*prompt;
@@ -61,7 +83,7 @@ int	ft_run_shell(int status, char execute)
 		}//remove
 		signal(SIGINT, ft_sig_handler);
 		if (!line/* && rl_eof_found*/)
-			return (/*ft_printf("%sexit\n", prompt), */free(prompt), 0);
+			return (/*ft_printf("%sexit\n", prompt), */free(prompt), status);
 		free(prompt);
 		// if (!line)
 		// 	return (ft_perror(ERR_ERRNO, "readline"));
@@ -69,7 +91,7 @@ int	ft_run_shell(int status, char execute)
 			add_history(line);
 		execute = !ft_only_space(line);
 		if (execute)
-			status = ft_execute(status, ft_parse(status, ft_lex(line)));
+			status = ft_handle_line(status, line);
 		else
 			free(line);
 	}

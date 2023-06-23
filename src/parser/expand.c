@@ -68,7 +68,7 @@ static void	ft_escaping_backslashes(char **str, char is_heredoc)
 	i = -1;
 	while ((*str)[++i + 1])
 	{
-		if (!quote && (*str)[i] == '\'')
+		if (!quote && ft_strchr("\'\"", (*str)[i]))
 			quote = (*str)[i];
 		else if ((*str)[i] == quote)
 			quote = 0;
@@ -105,20 +105,3 @@ char	ft_expand(char **str, int status, char id)
 	}
 	return (ft_escaping_backslashes(str, id == HEREDOC), RETURN_SUCCESS);
 }
-
-// int	main(void)
-// {
-// 	char	*input;
-// 	char	*str;
-
-// 	input = get_next_line(STDIN_FILENO);
-// 	str = ft_strtrim(input, "\n");
-// 	printf("\nWORD\n");
-// 	printf("____%d____\n%s\n",ft_expand_env_vars(&str, 42, WORD), str);
-// 	free(str);
-// 	str = ft_strtrim(input, "\n");
-// 	free(input);
-// 	printf("\nHEREDOC\n");
-// 	printf("____%d____\n%s\n", ft_expand_env_vars(&str, 42, HEREDOC), str);
-// 	free(str);
-// }

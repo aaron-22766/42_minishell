@@ -1,22 +1,29 @@
 #include "../../include/minishell/parser.h"
 
-void	ft_free_cmds(t_cmds *commands)
+t_cmds	*ft_free_cmd(t_cmds *cmd)
 {
 	t_cmds	*next;
 	size_t	i;
 
-	while (commands)
-	{
-		free(commands->path);
-		i = -1;
-		while (commands->argv && commands->argv[++i])
-			free(commands->argv[i]);
-		free(commands->argv);
-		ft_free_tokens(commands->io_red);
-		next = commands->next;
-		free(commands);
-		commands = next;
-	}
+	free(cmd->path);
+	i = -1;
+	while (cmd->argv && cmd->argv[++i])
+		free(cmd->argv[i]);
+	free(cmd->argv);
+	ft_free_tokens(cmd->io_red);
+	if (cmd->fd_in != STDIN_FILENO)
+		close(cmd->fd_in);
+	if (cmd->fd_out != STDOUT_FILENO)
+		close(cmd->fd_out);
+	next = cmd->next;
+	free(cmd);
+	return (next);
+}
+
+void	ft_free_commands(t_cmds *cmd)
+{
+	while (cmd)
+		cmd = ft_free_cmd(cmd);
 }
 
 ssize_t	ft_setchar(char *str, char c, ssize_t index)
