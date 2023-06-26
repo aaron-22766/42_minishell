@@ -42,7 +42,7 @@ static char	*ft_find_path(char *name)
 	exit(ft_perror(ERR_CMD_NOT_FOUND, name));
 }
 
-static void	ft_redirect(int	fd, char std)
+static void	ft_redirect(int fd, char std)
 {
 	if (fd != std && dup2(fd, std) == -1)
 		exit(ft_perror(ERR_ERRNO, "failed to dup stdin"));

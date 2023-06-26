@@ -48,8 +48,6 @@ void	ft_print_environ(void)
 	while (environ && environ[++i])
 		if (ft_strchr(environ[i], '='))
 			printf("%s\n", environ[i]);
-	if (!environ || i == 0)
-		printf("No environment variables!\n");
 }
 
 void	ft_free_environ(void)
