@@ -1,12 +1,28 @@
 #include "../../include/minishell/builtin.h"
 
+char	ft_is_option(char *arg)
+{
+	size_t	i;
+
+	if (!arg || !!ft_strncmp(arg, "-n", 2))
+		return (false);
+	i = 1;
+	while (arg[++i])
+		if (arg[i] != 'n')
+			return (false);
+	return (true);
+}
+
 int	ft_echo(t_cmds *cmd)
 {
 	int		i;
 	char	nl;
 
 	i = 1;
-	while (cmd->argv[i] && !ft_strcmp(cmd->argv[i], "-n"))
+	if (!ft_strcmp(cmd->argv[0], "echo"))
+		while (ft_is_option(cmd->argv[i]))
+			i++;
+	else if (cmd->argv[i] && !ft_strcmp(cmd->argv[i], "-n"))
 		i++;
 	nl = (i == 1);
 	while (cmd->argv[i])

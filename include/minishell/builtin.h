@@ -33,7 +33,7 @@ int		ft_unset(t_cmds *cmd);
 
 // export.c
 int		ft_export(t_cmds *cmd);
-char	ft_print_export(void);
+void	ft_print_export(void);
 
 // utils.c
 char	ft_valid_identifier(char *arg, char delim);

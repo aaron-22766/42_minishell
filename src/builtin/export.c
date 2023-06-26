@@ -23,7 +23,7 @@ static void	ft_print_var(char *var)
 	printf("\"\n");
 }
 
-char	ft_print_export(void)
+void	ft_print_export(void)
 {
 	extern char	**environ;
 	char		*prev;
@@ -32,7 +32,7 @@ char	ft_print_export(void)
 	size_t		j;
 
 	if (!environ)
-		return (1);
+		exit(1);
 	prev = "";
 	i = -1;
 	while (environ[++i])
@@ -49,7 +49,7 @@ char	ft_print_export(void)
 			ft_print_var(current);
 		prev = current;
 	}
-	return (0);
+	exit(0);
 }
 
 int	ft_export(t_cmds *cmd)
@@ -70,10 +70,9 @@ int	ft_export(t_cmds *cmd)
 				cmd->argv[i]);
 			status = 1;
 		}
-		else
-			if (ft_putenv(cmd->argv[i]) == -1)
-				ft_eprintf("minishell: export: `%s': failed to export\n",
-					cmd->argv[i]);
+		else if (ft_putenv(cmd->argv[i]) == -1)
+			ft_eprintf("minishell: export: `%s': failed to export\n",
+				cmd->argv[i]);
 		i++;
 	}
 	return (status);

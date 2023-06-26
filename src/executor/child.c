@@ -20,7 +20,7 @@ static char	*ft_find_path(char *name)
 	char		*cmd_path;
 	int			i;
 
-	if (!name[0] || !ft_strcmp(name, "."))
+	if (!name[0] || !ft_strcmp(name, ".") || !ft_strcmp(name, ".."))
 		exit(ft_perror(ERR_CMD_NOT_FOUND, name));
 	if (ft_strchr(name, '/') || !getenv("PATH"))
 	{

@@ -26,6 +26,8 @@ int	ft_execute(int status, t_cmds *commands)
 		return (ft_exit(status, commands));
 	if (!commands->next && commands->builtin == B_CD)
 		return (ft_cd(commands));
+	if (!commands->next && commands->builtin == B_EXPORT && commands->argv[1])
+		return (ft_export(commands));
 	while (commands && g_ctrlc == false)
 	{
 		ft_check_builtin(commands);

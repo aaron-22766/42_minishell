@@ -5,6 +5,9 @@ int	ft_unset(t_cmds *cmd)
 	int	status;
 	int	i;
 
+	if (cmd->argv[1] && cmd->argv[1][0] == '-')
+		return (ft_eprintf("minishell: export: -%c: invalid option\n",
+				cmd->argv[1][1]), 2);
 	status = 0;
 	i = 0;
 	while (cmd->argv[++i])

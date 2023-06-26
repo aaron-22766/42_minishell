@@ -27,12 +27,10 @@ int	ft_existing_env_var(const char *var, ssize_t name_len)
 	int			existing;
 	int			i;
 
-	if (!var || (name_len > 0 && name_len < 3))
+	if (!var || !name_len)
 		return (-1);
 	if (name_len == -1)
 		name_len = ft_strlen(var);
-	else
-		name_len++;
 	existing = -1;
 	i = -1;
 	while (environ[++i])

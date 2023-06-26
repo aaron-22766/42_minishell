@@ -35,7 +35,7 @@ int	ft_exit(int status, t_cmds *cmd)
 
 	if (!cmd->argv[1])
 		ft_free_exit(cmd, status);
-	ft_eprintf("exit\n");
+	// ft_eprintf("exit\n");//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!UNCOMMENT
 	if (ft_is_num(cmd->argv[1]) == false)
 		ft_numeric_arg_required(cmd);
 	if (cmd->argv[2])
