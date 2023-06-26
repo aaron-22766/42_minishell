@@ -1,69 +1,75 @@
 #include "../../include/minishell/minishell.h"
 
-static char	*ft_get_shell(char *ms_path, char *prev)
+static char	*ft_get_shell(char *ms_path, char *cwd)
 {
-	char	*cwd;
 	char	*new_shell;
 
-	if (ms_path[0] == '/')
-	{
-		if (ft_asprintf(&new_shell, "SHELL=%s", ms_path) < 0)
-			return (ft_perror(ERR_MEM, "creating environment variable: SHELL"),
-				ft_strdup(prev));
-		return (new_shell);
-	}
-	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (ft_perror(ERR_ERRNO, "Current working directory not found"),
-			ft_strdup(prev));
+		return (NULL);
+	if (ms_path[0] == '/')
+		return (ft_strdup(ms_path));
 	if (!ft_strcmp(ms_path, "./minishell"))
 		ms_path = "minishell";
-	if (ft_asprintf(&new_shell, "SHELL=%s/%s", cwd, ms_path) < 0)
-		return (ft_perror(ERR_MEM, "creating environment variable: SHELL"),
-			free(cwd), ft_strdup(prev));
+	ft_asprintf(&new_shell, "%s/%s", cwd, ms_path);
 	return (free(cwd), new_shell);
 }
 
-static char	*ft_get_level(char *prev)
-{
-	char	*current;
-	char	*lvl;
-	char	*new;
-
-	current = getenv("SHLVL");
-	if (!current)
-		return (ft_strdup(prev));
-	lvl = ft_str_add(current, "1");
-	if (!lvl)
-		return (ft_perror(ERR_MEM, "creating environment variable: SHLVL"),
-			ft_strdup(prev));
-	if (ft_asprintf(&new, "SHLVL=%s", lvl) == -1)
-		return (ft_perror(ERR_MEM, "creating environment variable: SHELL"),
-			free(lvl), ft_strdup(prev));
-	return (new);
-}
-
-void	ft_init_shell(char *ms_path)
+static void	ft_copy_env(void)
 {
 	extern char	**environ;
 	char		**new;
 	int			i;
 
 	new = ft_calloc(ft_environ_size() + 1, sizeof(char *));
-	if (new)
+	if (!new)
 	{
-		i = -1;
-		while (environ[++i])
+		ft_perror(ERR_MEM, "initializing environment");
+		return ;
+	}
+	i = -1;
+	while (environ[++i])
+	{
+		new[i] = ft_strdup(environ[i]);
+		if (!new[i])
 		{
-			if (ft_strncmp(environ[i], "SHELL", 6) == '=')
-				new[i] = ft_get_shell(ms_path, environ[i]);
-			else if (ft_strncmp(environ[i], "SHLVL", 6) == '=')
-				new[i] = ft_get_level(environ[i]);
-			else
-				new[i] = ft_strdup(environ[i]);
+			ft_perror(ERR_MEM, "initializing environment");
+			ft_free_environ();
+			return ;
 		}
 	}
 	environ = new;
+}
+
+static void	ft_set_env(char *ms_path)
+{
+	char	*cwd;
+	char	*val;
+
+	ft_putenv("OLDPWD");
+	cwd = getcwd(NULL, 0);
+	ft_setenv("PWD", cwd, 1);
+	if (!getenv("SHLVL"))
+		ft_putenv("SHLVL=1");
+	else
+	{
+		val = ft_str_add(getenv("SHLVL"), "1");
+		if (!val || ft_setenv("SHLVL", val, 1) == -1)
+			ft_perror(ERR_MEM, "setting environment variable: SHLVL");
+		free(val);
+	}
+	if (getenv("SHELL"))
+	{
+		val = ft_get_shell(ms_path, cwd);
+		if (!val || ft_setenv("SHELL", val, 1) == -1)
+			ft_perror(ERR_MEM, "setting environment variable: SHELL");
+		free(val);
+	}
+}
+
+void	ft_init_shell(char *ms_path)
+{
+	ft_copy_env();
+	ft_set_env(ms_path);
 	if (verbose)
 	{
 		printf("\033[1;33mENVIRONMENT\033[0m\n");

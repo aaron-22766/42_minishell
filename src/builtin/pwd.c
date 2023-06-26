@@ -9,12 +9,11 @@ int	ft_pwd(t_cmds *cmd)
 	{
 		pwd = getcwd(NULL, 0);
 		if (!pwd)
-			return (ft_perror_builtin("cd", ERR_ERRNO, cmd->argv[0]));
+			exit(ft_perror_builtin(cmd->argv[0], ERR_ERRNO, cmd->argv[0]));
 		printf("%s\n", pwd);
 		free(pwd);
+		exit(0);
 	}
-	else
-		return (ft_eprintf("minishell: %s: no options allowed\n", cmd->argv[0]),
-			1);
-	return (0);
+	ft_eprintf("minishell: %s: no options allowed\n", cmd->argv[0]);
+	exit(1);
 }

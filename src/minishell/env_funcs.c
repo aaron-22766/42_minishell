@@ -40,7 +40,7 @@ int	ft_setenv(const char *name, const char *value, int overwrite)
 	char		*new_var;
 	int			existing;
 
-	if (!environ || !name || !ft_strlen(name) || ft_strchr(name, '='))
+	if (!environ || !name || !value || !ft_strlen(name) || ft_strchr(name, '='))
 		return (-1);
 	existing = ft_existing_env_var(name, ft_strlen(name));
 	if (existing == -1 && !overwrite)

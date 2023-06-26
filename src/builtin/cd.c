@@ -11,6 +11,7 @@ static int	ft_cd_custom(char *pwd, char *env)
 		return (free(pwd), ft_perror_builtin("cd", ERR_ERRNO, new_pwd));
 	ft_setenv("OLDPWD", pwd, 1);
 	ft_setenv("PWD", new_pwd, 1);
+	free(pwd);
 	return (0);
 }
 
@@ -39,10 +40,9 @@ int	ft_cd(t_cmds *cmd)
 		return (ft_cd_custom(pwd, "HOME"));
 	else if (ft_strcmp(cmd->argv[1], "-") == 0)
 	{
-		printf("%s\n", getcwd(NULL, 0));
-		ft_cd_custom(pwd, "OLDPWD");
+		if (getenv("OLDPWD"))
+			printf("%s\n", getenv("OLDPWD"));
+		return (ft_cd_custom(pwd, "OLDPWD"));
 	}
-	else
-		ft_cd_path(cmd, pwd);
-	return (0);
+	return (ft_cd_path(cmd, pwd));
 }

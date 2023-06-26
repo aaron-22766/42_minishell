@@ -64,19 +64,19 @@ static char	*ft_complex_value(char esc)
 static char	*ft_escape_value(char esc)
 {
 	if (esc == '[')
-		return (ft_substr("\001", 0, 1));
+		return (ft_strdup("\001"));
 	if (esc == ']')
-		return (ft_substr("\002", 0, 1));
+		return (ft_strdup("\002"));
 	if (esc == 'a')
-		return (ft_substr("\a", 0, 1));
+		return (ft_strdup("\a"));
 	if (esc == 'e')
-		return (ft_substr("\e", 0, 1));
+		return (ft_strdup("\e"));
 	if (esc == 'n')
-		return (ft_substr("\n", 0, 1));
+		return (ft_strdup("\n"));
 	if (esc == 'r')
-		return (ft_substr("\r", 0, 1));
+		return (ft_strdup("\r"));
 	if (esc == '\\')
-		return (ft_substr("\\", 0, 1));
+		return (ft_strdup("\\"));
 	if (esc == 's')
 		return (ft_strdup("minishell"));
 	if (ft_strchr("wW", esc))

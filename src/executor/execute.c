@@ -22,13 +22,16 @@ int	ft_execute(int status, t_cmds *commands)
 		return (ft_free_cmd(commands), RETURN_FAILURE);
 	ft_create_redirections(status, commands);
 	ft_check_builtin(commands);
-	if (!commands->next && (commands->builtin == B_EXIT))
-		ft_exit(commands);//ft_exit(status, commands); + B_CD
+	if (!commands->next && commands->builtin == B_EXIT)
+		return (ft_exit(status, commands));
+	if (!commands->next && commands->builtin == B_CD)
+		return (ft_cd(commands));
 	while (commands && g_ctrlc == false)
 	{
 		ft_check_builtin(commands);
 		status = 1;
-		if (commands->builtin != B_NO && commands->builtin != B_ECHO)
+		if ((commands->builtin & B_PARENT)
+			&& !(commands->builtin == B_EXPORT && !commands->argv[1]))
 			status = ft_run_builtin(commands);
 		else if (commands->argv)
 			status = ft_create_child(commands);

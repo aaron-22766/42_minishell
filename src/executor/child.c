@@ -42,14 +42,21 @@ static char	*ft_find_path(char *name)
 	exit(ft_perror(ERR_CMD_NOT_FOUND, name));
 }
 
+static void	ft_redirect(int	fd, char std)
+{
+	if (fd != std && dup2(fd, std) == -1)
+		exit(ft_perror(ERR_ERRNO, "failed to dup stdin"));
+	if (fd != std)
+		close(fd);
+	fd = std;
+}
+
 static void	ft_execute_child(t_cmds *cmd)
 {
 	extern char	**environ;
 
-	if (cmd->fd_in != STDIN_FILENO && dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		exit(ft_perror(ERR_ERRNO, "failed to dup stdin"));
-	if (cmd->fd_out != STDOUT_FILENO && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		exit(ft_perror(ERR_ERRNO, "failed to dup stdout"));
+	ft_redirect(cmd->fd_in, STDIN_FILENO);
+	ft_redirect(cmd->fd_out, STDOUT_FILENO);
 	ft_run_builtin(cmd);
 	cmd->path = ft_find_path(cmd->argv[0]);
 	if (g_ctrlc == true)
