@@ -90,7 +90,7 @@ int	ft_run_shell(int status, char execute)
 		if (line && line[0])
 			add_history(line);
 		execute = !ft_only_space(line);
-		if (execute)
+		if (execute && line[0] != '#')
 			status = ft_handle_line(status, line);
 		else
 			free(line);

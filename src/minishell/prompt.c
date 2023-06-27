@@ -98,14 +98,9 @@ char	*ft_expand_prompt(char *prompt)
 	while (prompt && prompt[backslash])
 	{
 		val = ft_escape_value(prompt[backslash + 1]);
-		if (val)
-		{
-			ft_str_insert(&prompt, val, backslash, 2);
-			backslash += ft_strlen(val);
-			free(val);
-		}
-		else
-			ft_str_insert(&prompt, "", backslash, 1);
+		ft_str_insert(&prompt, val, backslash, 1 + !!val);
+		backslash += ft_strplen(val);
+		free(val);
 		if (prompt)
 			backslash = ft_next_escape(prompt, backslash);
 	}

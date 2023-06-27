@@ -36,32 +36,6 @@ ssize_t	ft_setchar(char *str, char c, ssize_t index)
 	return (index);
 }
 
-t_tokens	*ft_remove_token(t_tokens **head, t_tokens *remove)
-{
-	t_tokens	*current;
-	t_tokens	*prev;
-
-	current = *head;
-	if (current == remove)
-	{
-		*head = current->next;
-		free(current->content);
-		free(current);
-		return (*head);
-	}
-	while (current && current != remove)
-	{
-		prev = current;
-		current = current->next;
-	}
-	if (!current)
-		return (NULL);
-	prev->next = current->next;
-	free(current->content);
-	free(current);
-	return (prev->next);
-}
-
 void	print_cmds(t_cmds *commands)
 {
 	size_t	i;

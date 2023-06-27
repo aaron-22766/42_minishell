@@ -82,7 +82,6 @@ char	ft_expand(char **str, int status, char id)
 	size_t	env;
 	size_t	len;
 	char	*val;
-	size_t	val_len;
 
 	env = ft_next_env(*str, 0, id == HEREDOC);
 	while ((*str)[env])
@@ -95,13 +94,10 @@ char	ft_expand(char **str, int status, char id)
 				return (ft_perror(ERR_AMBIG_RED, *str), RETURN_FAILURE);
 			return (RMV);
 		}
-		val_len = 0;
-		if (val)
-			val_len = ft_strlen(val);
 		if (ft_str_insert(str, val, env, len))
-			env += val_len;
-		env = ft_next_env(*str, env, id == HEREDOC);
+			env += ft_strplen(val);
 		free(val);
+		env = ft_next_env(*str, env, id == HEREDOC);
 	}
 	return (ft_escaping_backslashes(str, id == HEREDOC), RETURN_SUCCESS);
 }

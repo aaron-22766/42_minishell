@@ -69,8 +69,7 @@ char	g_ctrlc;
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
-// signals.c
-void	ft_readline_handler(int sig);
+// minishell.c
 void	ft_sig_handler(int sig);
 
 // error.c

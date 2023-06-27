@@ -22,7 +22,9 @@
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
-// minishell.c
+/* minishell.c
+int		main(int argc, char **argv);*/
+void	ft_readline_handler(int sig);
 
 // init_shell.c
 void	ft_init_shell(char *ms_path);

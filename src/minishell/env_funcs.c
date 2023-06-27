@@ -40,7 +40,7 @@ int	ft_setenv(const char *name, const char *value, int overwrite)
 	char		*new_var;
 	int			existing;
 
-	if (!environ || !name || !value || !ft_strlen(name) || ft_strchr(name, '='))
+	if (!environ || !value || !name || !name[0] || ft_strchr(name, '='))
 		return (-1);
 	existing = ft_existing_env_var(name, ft_strlen(name));
 	if (existing == -1 && !overwrite)
@@ -96,7 +96,7 @@ int	ft_unsetenv(const char *name)
 	size_t		last_index;
 	size_t		i;
 
-	if (!environ || !name || !ft_strlen(name) || ft_strchr(name, '='))
+	if (!environ || !name || !name[0] || ft_strchr(name, '='))
 		return (-1);
 	last_index = ft_environ_size() - 1;
 	i = -1;

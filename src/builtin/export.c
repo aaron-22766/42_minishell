@@ -2,18 +2,15 @@
 
 static void	ft_print_var(char *var)
 {
-	size_t	i;
+	int	i;
 
-	if (!ft_strchr(var, '='))
+	i = ft_strchr_index(var, '=');
+	if (i == -1)
 	{
 		printf("declare -x %s\n", var);
 		return ;
 	}
-	printf("declare -x ");
-	i = 0;
-	while (var[i] && var[i] != '=')
-		printf("%c", var[i++]);
-	printf("=\"");
+	printf("declare -x %.*s=\"", i, var);
 	while (var[++i])
 	{
 		if (var[i] == '\\')
@@ -45,8 +42,7 @@ void	ft_print_export(void)
 				&& (!current || ft_strcmp(environ[j], current) < 0))
 				current = environ[j];
 		}
-		if (!!ft_strncmp(current, "_=", 2))
-			ft_print_var(current);
+		ft_print_var(current);
 		prev = current;
 	}
 	exit(0);
