@@ -21,7 +21,15 @@ static int	ft_heredoc(unsigned char status, char *eof)
 	while (true)
 	{
 		signal(SIGINT, ft_heredoc_handler);
-		line = readline(prompt);
+		// if (isatty(fileno(stdin)))//remove
+			line = readline(prompt);
+		// else//remove
+		// {//remove
+		// 	char *gnl;//remove
+		// 	gnl = get_next_line(fileno(stdin));//remove
+		// 	line = ft_strtrim(gnl, "\n");//remove
+		// 	free(gnl);//remove
+		// }//remove
 		signal(SIGINT, ft_sig_handler);
 		if (!line && rl_eof_found)
 			ft_printf("\e[A\e[K%s", prompt);

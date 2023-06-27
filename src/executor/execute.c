@@ -16,18 +16,27 @@ static char	ft_create_pipes(t_cmds *cmd)
 	return (RETURN_SUCCESS);
 }
 
+static char	ft_single_builtin(int *status, t_cmds *commands)
+{
+	ft_check_builtin(commands);
+	if (!commands->next && commands->builtin == B_EXPORT && commands->argv[1])
+		*status = ft_export(commands);
+	else if (!commands->next && commands->builtin == B_EXIT)
+		*status = ft_exit(*status, commands);
+	else if (!commands->next && commands->builtin == B_CD)
+		*status = ft_cd(commands);
+	else
+		return (false);
+	return (true);
+}
+
 int	ft_execute(int status, t_cmds *commands)
 {
 	if (ft_create_pipes(commands) == RETURN_FAILURE)
 		return (ft_free_cmd(commands), RETURN_FAILURE);
 	ft_create_redirections(status, commands);
-	ft_check_builtin(commands);
-	if (!commands->next && commands->builtin == B_EXIT)
-		return (ft_exit(status, commands));
-	if (!commands->next && commands->builtin == B_CD)
-		return (ft_cd(commands));
-	if (!commands->next && commands->builtin == B_EXPORT && commands->argv[1])
-		return (ft_export(commands));
+	if (ft_single_builtin(&status, commands) == true)
+		return (ft_free_commands(commands), status);
 	while (commands && g_ctrlc == false)
 	{
 		ft_check_builtin(commands);

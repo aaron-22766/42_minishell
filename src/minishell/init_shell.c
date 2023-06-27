@@ -11,7 +11,7 @@ static char	*ft_get_shell(char *ms_path, char *cwd)
 	if (!ft_strcmp(ms_path, "./minishell"))
 		ms_path = "minishell";
 	ft_asprintf(&new_shell, "%s/%s", cwd, ms_path);
-	return (free(cwd), new_shell);
+	return (new_shell);
 }
 
 static void	ft_copy_env(void)
@@ -64,6 +64,7 @@ static void	ft_set_env(char *ms_path)
 			ft_perror(ERR_MEM, "setting environment variable: SHELL");
 		free(val);
 	}
+	free(cwd);
 }
 
 void	ft_init_shell(char *ms_path)
