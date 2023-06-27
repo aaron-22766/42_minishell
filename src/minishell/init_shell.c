@@ -24,7 +24,7 @@ static void	ft_copy_env(void)
 	if (!new)
 	{
 		ft_perror(ERR_MEM, "initializing environment");
-		return ;
+		exit(1);
 	}
 	i = -1;
 	while (environ[++i])
@@ -33,37 +33,35 @@ static void	ft_copy_env(void)
 		if (!new[i])
 		{
 			ft_perror(ERR_MEM, "initializing environment");
-			ft_free_environ();
-			return ;
+			while (--i >= 0)
+				free(new[i]);
+			free(new);
+			exit(1);
 		}
 	}
 	environ = new;
 }
 
+static void	ft_set_sh(const char *var, char *val)
+{
+	if (!val || ft_setenv(var, val, 1) == -1)
+		ft_perror(ERR_MEM, "setting environment variable");
+	free(val);
+}
+
 static void	ft_set_env(char *ms_path)
 {
 	char	*cwd;
-	char	*val;
 
 	ft_putenv("OLDPWD");
 	cwd = getcwd(NULL, 0);
 	ft_setenv("PWD", cwd, 1);
-	if (!getenv("SHLVL"))
-		ft_putenv("SHLVL=1");
+	if (getenv("SHLVL"))
+		ft_set_sh("SHLVL", ft_str_add(getenv("SHLVL"), "1"));
 	else
-	{
-		val = ft_str_add(getenv("SHLVL"), "1");
-		if (!val || ft_setenv("SHLVL", val, 1) == -1)
-			ft_perror(ERR_MEM, "setting environment variable: SHLVL");
-		free(val);
-	}
+		ft_putenv("SHLVL=1");
 	if (getenv("SHELL"))
-	{
-		val = ft_get_shell(ms_path, cwd);
-		if (!val || ft_setenv("SHELL", val, 1) == -1)
-			ft_perror(ERR_MEM, "setting environment variable: SHELL");
-		free(val);
-	}
+		ft_set_sh("SHELL", ft_get_shell(ms_path, cwd));
 	free(cwd);
 }
 

@@ -84,7 +84,7 @@ int	ft_create_child(t_cmds *cmd)
 		ft_execute_child(cmd);
 	else
 	{
-		if (waitpid(pid, &wait_status, 0) == -1)
+		if (waitpid(pid, &wait_status, WUNTRACED) == -1)
 			ft_perror(ERR_ERRNO, "waiting for child process failed");
 		if (g_ctrlc == true)
 			return (printf("\n"), 130);

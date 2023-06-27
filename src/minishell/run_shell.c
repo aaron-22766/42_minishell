@@ -73,21 +73,21 @@ int	ft_run_shell(int status, char execute)
 		g_ctrlc = false;
 		prompt = ft_get_prompt(status, execute);
 		signal(SIGINT, ft_readline_handler);
-		// if (isatty(fileno(stdin)))//remove
+		if (isatty(fileno(stdin)))//remove
 			line = readline(prompt);
-		// else//remove
-		// {//remove
-		// 	char *tester = get_next_line(fileno(stdin));//remove
-		// 	line = ft_strtrim(tester, "\n");//remove
-		// 	free(tester);//remove
-		// }//remove
+		else//remove
+		{//remove
+			char *tester = get_next_line(fileno(stdin));//remove
+			line = ft_strtrim(tester, "\n");//remove
+			free(tester);//remove
+		}//remove
 		signal(SIGINT, ft_sig_handler);
-		if (!line && rl_eof_found)
-			return (ft_printf("%sexit\n", prompt), free(prompt),
+		if (!line/* && rl_eof_found*/)
+			return (/*ft_printf("%sexit\n", prompt), */free(prompt),
 				ft_free_environ(), status);
 		free(prompt);
-		if (!line)
-			return (ft_free_environ(), ft_perror(ERR_ERRNO, "readline"));
+		// if (!line)
+		// 	return (ft_free_environ(), ft_perror(ERR_ERRNO, "readline"));
 		if (line && line[0])
 			add_history(line);
 		execute = !ft_only_space(line);

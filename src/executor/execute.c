@@ -25,6 +25,8 @@ static char	ft_single_builtin(int *status, t_cmds *commands)
 		*status = ft_exit(*status, commands);
 	else if (!commands->next && commands->builtin == B_CD)
 		*status = ft_cd(commands);
+	else if (!commands->next && commands->builtin == B_UNSET)
+		*status = ft_unset(commands);
 	else
 		return (false);
 	return (true);
@@ -41,10 +43,7 @@ int	ft_execute(int status, t_cmds *commands)
 	{
 		ft_check_builtin(commands);
 		status = 1;
-		if ((commands->builtin & B_PARENT)
-			&& !(commands->builtin == B_EXPORT && !commands->argv[1]))
-			status = ft_run_builtin(commands);
-		else if (commands->argv)
+		if (commands->argv)
 			status = ft_create_child(commands);
 		commands = ft_free_cmd(commands);
 	}

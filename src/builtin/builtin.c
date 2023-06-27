@@ -28,8 +28,6 @@ void	ft_check_builtin(t_cmds *cmd)
 
 int	ft_run_builtin(t_cmds *cmd)
 {
-	if (cmd->builtin == B_UNSET)
-		return (ft_unset(cmd));
 	if (cmd->builtin == B_PWD)
 		return (ft_pwd(cmd));
 	if (cmd->builtin == B_ECHO)
@@ -38,5 +36,7 @@ int	ft_run_builtin(t_cmds *cmd)
 		return (ft_env(cmd));
 	if (cmd->builtin == B_EXPORT && !cmd->argv[1])
 		ft_print_export();
+	else if (cmd->builtin & B_PARENT)
+		exit(0);
 	return (EXIT_SUCCESS);
 }
