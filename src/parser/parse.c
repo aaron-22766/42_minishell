@@ -24,21 +24,24 @@ static void	ft_remove_quotes(t_tokens *tokens)
 	}
 }
 
-t_cmds	*ft_parse(int status, t_tokens *tokens)
+t_cmds	*ft_parse(int *status, t_tokens *tokens)
 {
 	t_cmds	*commands;
 
-	if (verbose)
-		print_tokens(tokens, "TOKENS");
-	if (!tokens || ft_expand_tokens(status, &tokens) == RETURN_FAILURE
-		|| !tokens)
+	if (ft_expand_tokens(*status, &tokens) == RETURN_FAILURE || !tokens)
+	{
+		*status = EXIT_FAILURE;
 		return (ft_free_tokens(tokens), NULL);
+	}
 	ft_evaluate_commands(tokens);
 	ft_remove_quotes(tokens);
 	if (verbose)
 		print_tokens(tokens, "EXPANDED TOKENS");
 	commands = ft_create_commands(tokens);
 	if (!commands)
+	{
+		*status = ERR_MEM;
 		return (ft_free_tokens(tokens), NULL);
+	}
 	return (commands);
 }

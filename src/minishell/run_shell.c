@@ -27,11 +27,11 @@ static char	*ft_get_prompt(int status, char execute)
 		prompt = "";
 	}
 	if (!execute)
-		ft_asprintf(&new, "\e[30;1m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", GRAY_INCIDATOR, prompt);
 	else if (status)
-		ft_asprintf(&new, "\e[1;31m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", RED_INCIDATOR, prompt);
 	else
-		ft_asprintf(&new, "\e[1;32m▶︎\e[0m %s", prompt);
+		ft_asprintf(&new, "%s %s", GREEN_INCIDATOR, prompt);
 	if (!new && malloced == true)
 		return (prompt);
 	if (!new)
@@ -41,36 +41,53 @@ static char	*ft_get_prompt(int status, char execute)
 	return (new);
 }
 
+int	ft_handle_line(int status, char *line)
+{
+	t_tokens	*tokens;
+	t_cmds		*commands;
+
+	tokens = ft_lex(&status, line);
+	if (verbose)
+		print_tokens(tokens, "TOKENS");
+	if (!tokens)
+		return (status);
+	commands = ft_parse(&status, tokens);
+	if (verbose)
+		print_cmds(commands);
+	if (!commands)
+		return (status);
+	if (verbose)
+		printf("\e[1;33mOUTPUT\e[0m\n");
+	ft_unsetenv("LINES");
+	ft_unsetenv("COLUMNS");
+	if (g_ctrlc == true)
+		return (printf("\n"), 130);
+	return (ft_execute(status, commands));
+}
+
 int	ft_run_shell(int status, char execute)
 {
 	char	*prompt;
 	char	*line;
-	char	*tester;
 
 	while (true)
 	{
 		g_ctrlc = false;
 		prompt = ft_get_prompt(status, execute);
 		signal(SIGINT, ft_readline_handler);
-		if (isatty(fileno(stdin)))//remove
-			line = readline(prompt);
-		else//remove
-		{//remove
-			tester = get_next_line(fileno(stdin));//remove
-			line = ft_strtrim(tester, "\n");//remove
-			free(tester);//remove
-		}//remove
+		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
-		if (!line/* && rl_eof_found*/)
-			return (/*ft_printf("%sexit\n", prompt), */free(prompt), 0);
+		if (!line && rl_eof_found)
+			return (ft_printf("%sexit\n", prompt), free(prompt),
+				ft_free_environ(), status);
 		free(prompt);
-		// if (!line)
-		// 	return (ft_perror(ERR_ERRNO, "readline"));
+		if (!line)
+			return (ft_free_environ(), ft_perror(ERR_ERRNO, "readline"));
 		if (line && line[0])
 			add_history(line);
 		execute = !ft_only_space(line);
-		if (execute)
-			status = ft_execute(status, ft_parse(status, ft_lex(line)));
+		if (execute && line[0] != '#')
+			status = ft_handle_line(status, line);
 		else
 			free(line);
 	}

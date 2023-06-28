@@ -27,11 +27,10 @@ int	ft_existing_env_var(const char *var, ssize_t name_len)
 	int			existing;
 	int			i;
 
-	if (!var || (name_len > 0 && name_len < 3))
+	if (!var || !name_len)
 		return (-1);
 	if (name_len == -1)
 		name_len = ft_strlen(var);
-	name_len++;
 	existing = -1;
 	i = -1;
 	while (environ[++i])
@@ -47,9 +46,8 @@ void	ft_print_environ(void)
 
 	i = -1;
 	while (environ && environ[++i])
-		printf("%s\n", environ[i]);
-	if (!environ || i == 0)
-		printf("No environment variables!\n");
+		if (ft_strchr(environ[i], '='))
+			printf("%s\n", environ[i]);
 }
 
 void	ft_free_environ(void)

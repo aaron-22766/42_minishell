@@ -34,16 +34,13 @@ typedef struct s_cmds
 /* ************************************************************************** */
 
 // parse.c
-t_cmds		*ft_parse(int status, t_tokens *tokens);
+t_cmds		*ft_parse(int *status, t_tokens *tokens);
 
 // expander.c
 char		ft_expand_tokens(int status, t_tokens **tokens);
-char		ft_expand_env_vars(int status, char **content,
-				char *quotes, char id);
 
-// expander_utils.c
-ssize_t		ft_setchar(char *str, char c, ssize_t index);
-t_tokens	*ft_remove_token(t_tokens **head, t_tokens *remove);
+// expand.c
+char		ft_expand(char **str, int status, char id);
 
 // commands.c
 t_cmds		*ft_create_commands(t_tokens *tokens);
@@ -52,7 +49,9 @@ t_cmds		*ft_create_commands(t_tokens *tokens);
 t_cmds		*ft_allocate_command_table(t_tokens *tokens);
 
 // utils.c
-void		ft_free_cmds(t_cmds *commands);
+t_cmds		*ft_free_cmd(t_cmds *cmd);
+void		ft_free_commands(t_cmds *cmd);
+ssize_t		ft_setchar(char *str, char c, ssize_t index);
 void		print_cmds(t_cmds *commands);
 
 #endif

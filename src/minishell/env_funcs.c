@@ -19,34 +19,18 @@ static char	ft_env_size_increment(void)
 	return (RETURN_SUCCESS);
 }
 
-static char	*ft_join_env_var(const char *name, const char *value)
-{
-	char	*var;
-	size_t	size;
-
-	size = ft_strlen(name) + ft_strlen(value) + 2;
-	var = ft_calloc(size, sizeof(char));
-	if (!var)
-		return (NULL);
-	ft_strcpy(var, name);
-	ft_strlcat(var, "=", size);
-	ft_strlcat(var, value, size);
-	return (var);
-}
-
 int	ft_setenv(const char *name, const char *value, int overwrite)
 {
 	extern char	**environ;
 	char		*new_var;
 	int			existing;
 
-	if (!environ || !name || !ft_strlen(name) || ft_strchr(name, '='))
+	if (!environ || !value || !name || !name[0] || ft_strchr(name, '='))
 		return (-1);
 	existing = ft_existing_env_var(name, ft_strlen(name));
 	if (existing == -1 && !overwrite)
 		return (0);
-	new_var = ft_join_env_var(name, value);
-	if (!new_var)
+	if (ft_asprintf(&new_var, "%s=%s", name, value) == -1)
 		return (-1);
 	if (existing == -1)
 	{
@@ -96,7 +80,7 @@ int	ft_unsetenv(const char *name)
 	size_t		last_index;
 	size_t		i;
 
-	if (!environ || !name || !ft_strlen(name) || ft_strchr(name, '='))
+	if (!environ || !name || !name[0] || ft_strchr(name, '='))
 		return (-1);
 	last_index = ft_environ_size() - 1;
 	i = -1;

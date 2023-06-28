@@ -52,5 +52,5 @@ t_cmds	*ft_allocate_command_table(t_tokens *tokens)
 		last->next = ft_new_cmd(ft_count_argv_tokens(tokens));
 		last = last->next;
 	}
-	return (ft_free_cmds(commands), NULL);
+	return (ft_free_commands(commands), NULL);
 }

@@ -44,15 +44,23 @@ static t_tokens	*ft_get_tokens(char *line)
 	return (tokens);
 }
 
-t_tokens	*ft_lex(char *line)
+t_tokens	*ft_lex(int *status, char *line)
 {
 	t_tokens	*tokens;
+	int			eval;
 
 	tokens = ft_get_tokens(line);
 	free(line);
 	if (!tokens || ft_split_at_operators(tokens) == RETURN_FAILURE)
+	{
+		*status = ERR_MEM;
 		return (ft_free_tokens(tokens), NULL);
-	if (ft_evaluate_tokens(tokens) == RETURN_FAILURE)
+	}
+	eval = ft_evaluate_tokens(tokens);
+	if (eval != RETURN_SUCCESS)
+	{
+		*status = eval;
 		return (ft_free_tokens(tokens), NULL);
+	}
 	return (tokens);
 }

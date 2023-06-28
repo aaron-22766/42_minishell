@@ -78,17 +78,17 @@ static char	*ft_check_syntax(t_tokens *tokens)
 	return (NULL);
 }
 
-char	ft_evaluate_tokens(t_tokens *tokens)
+int	ft_evaluate_tokens(t_tokens *tokens)
 {
 	char	*err_context;
 
 	ft_evaluate_operators(tokens);
 	err_context = ft_evaluate_redirections(tokens);
 	if (err_context)
-		return (ft_perror(ERR_TOKEN_SYNTAX, err_context), RETURN_FAILURE);
+		return (ft_perror(ERR_TOKEN_SYNTAX, err_context));
 	ft_evaluate_commands(tokens);
 	err_context = ft_check_syntax(tokens);
 	if (err_context)
-		return (ft_perror(ERR_TOKEN_SYNTAX, err_context), RETURN_FAILURE);
+		return (ft_perror(ERR_TOKEN_SYNTAX, err_context));
 	return (RETURN_SUCCESS);
 }

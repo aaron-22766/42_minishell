@@ -10,10 +10,6 @@ INCS		=	$(wildcard $(INCDIR)/*.h)
 SRCS		=	$(foreach dir, $(SUBDIRS), $(wildcard $(dir)/*.c))
 OBJS		=	$(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 
-# **************************************************************************** #
-#                               REMOVE WILDCARD                                #
-# **************************************************************************** #
-
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
 LDFLAGS		=	-lreadline -L $(HOME)/.brew/opt/readline/lib

@@ -48,7 +48,6 @@ size_t	ft_unquoted_char(char *str, const char *chars, const char *quotes)
 	return (i);
 }
 
-// remove on final
 t_tokens	*print_tokens(t_tokens *tokens, const char *title)
 {
 	if (title)

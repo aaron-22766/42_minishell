@@ -24,10 +24,10 @@ static int	ft_heredoc(unsigned char status, char *eof)
 		line = readline(prompt);
 		signal(SIGINT, ft_sig_handler);
 		if (!line && rl_eof_found)
-			ft_printf("\033[A\033[K%s", prompt);
+			ft_printf("\e[A\e[K%s", prompt);
 		if (!line || !ft_strcmp(line, eof))
 			return (free(line), close(fd[1]), fd[0]);
-		if (ft_expand_env_vars(status, &line, "", 0) != RMV)
+		if (ft_expand(&line, status, HEREDOC) != RMV)
 			ft_putstr_fd(line, fd[1]);
 		ft_putstr_fd("\n", fd[1]);
 		free(line);
@@ -63,20 +63,27 @@ static char	ft_set_redirection(int status, t_tokens *red, t_cmds *cmd)
 	return (RETURN_SUCCESS);
 }
 
-char	ft_install_redirections(int status, t_cmds *cmd)
+void	ft_create_redirections(int status, t_cmds *cmd)
 {
 	t_tokens	*red;
+	size_t		i;
 
-	red = cmd->io_red;
-	while (red)
+	while (cmd)
 	{
-		if (ft_set_redirection(status, red, cmd) == RETURN_FAILURE)
-			return (RETURN_FAILURE);
-		red = red->next;
+		i = 0;
+		red = cmd->io_red;
+		while (red)
+		{
+			if (ft_set_redirection(status, red, cmd) == RETURN_FAILURE)
+			{
+				while (cmd->argv && cmd->argv[i])
+					free(cmd->argv[i++]);
+				free(cmd->argv);
+				cmd->argv = NULL;
+				break ;
+			}
+			red = red->next;
+		}
+		cmd = cmd->next;
 	}
-	if (cmd->fd_in != STDIN_FILENO && dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		return (ft_perror(ERR_ERRNO, "failed to redirect"), RETURN_FAILURE);
-	if (cmd->fd_out != STDOUT_FILENO && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		return (ft_perror(ERR_ERRNO, "failed to redirect"), RETURN_FAILURE);
-	return (RETURN_SUCCESS);
 }

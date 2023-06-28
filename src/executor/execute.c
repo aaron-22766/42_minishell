@@ -1,48 +1,29 @@
 #include "../../include/minishell/executor.h"
 
-static char	ft_create_pipes(t_cmds *cmd)
+static char	ft_single_builtin(int *status, t_cmds *commands)
 {
-	int	fd[2];
-
-	while (cmd && cmd->next)
-	{
-		if (pipe(fd) == -1)
-			return (ft_perror(ERR_ERRNO, "pipe creation failed"),
-				RETURN_FAILURE);
-		cmd->fd_out = fd[1];
-		cmd->next->fd_in = fd[0];
-		cmd = cmd->next;
-	}
-	return (RETURN_SUCCESS);
+	ft_check_builtin(commands);
+	if (!commands->next && commands->builtin == B_EXPORT && commands->argv[1])
+		*status = ft_export(commands);
+	else if (!commands->next && commands->builtin == B_EXIT)
+		*status = ft_exit(*status, commands);
+	else if (!commands->next && commands->builtin == B_CD)
+		*status = ft_cd(commands);
+	else if (!commands->next && commands->builtin == B_UNSET)
+		*status = ft_unset(commands);
+	else
+		return (false);
+	return (true);
 }
 
 int	ft_execute(int status, t_cmds *commands)
 {
-	t_cmds	*cmd;
-
-	if (!commands || ft_create_pipes(commands) == RETURN_FAILURE)
-		return (ft_free_cmds(commands), RETURN_FAILURE);
-	if (verbose)
-	{
-		print_cmds(commands);
-		printf("\e[1;33mOUTPUT\e[0m\n");
-	}
-	cmd = commands;
-	ft_check_builtin(cmd);
-	if (!cmd->next && cmd->builtin == B_EXIT)
-		ft_exit(cmd);
-	while (cmd && g_ctrlc == false)
-	{
-		ft_check_builtin(cmd);
-		if (cmd->builtin != B_NO && cmd->builtin != B_ECHO)
-			status = ft_run_builtin(cmd);
-		else
-			status = ft_create_child(status, cmd);
-		if (cmd->next)
-			close(cmd->fd_out);
-		if (cmd != commands)
-			close(cmd->fd_in);
-		cmd = cmd->next;
-	}
-	return (ft_free_cmds(commands), status);
+	if (ft_single_builtin(&status, commands) == true)
+		return (ft_free_commands(commands), status);
+	ft_create_redirections(status, commands);
+	status = ft_pipeline(commands, -1);
+	waitpid(-1, NULL, WUNTRACED);
+	if (g_ctrlc == true)
+		printf("\n");
+	return (ft_free_commands(commands), status);
 }

@@ -63,18 +63,20 @@ static char	*ft_complex_value(char esc)
 
 static char	*ft_escape_value(char esc)
 {
-	if (ft_strchr("[]", esc))
-		return (ft_strdup(""));
+	if (esc == '[')
+		return (ft_strdup("\001"));
+	if (esc == ']')
+		return (ft_strdup("\002"));
 	if (esc == 'a')
-		return (ft_substr("\a", 0, 1));
+		return (ft_strdup("\a"));
 	if (esc == 'e')
-		return (ft_substr("\e", 0, 1));
+		return (ft_strdup("\e"));
 	if (esc == 'n')
-		return (ft_substr("\n", 0, 1));
+		return (ft_strdup("\n"));
 	if (esc == 'r')
-		return (ft_substr("\r", 0, 1));
+		return (ft_strdup("\r"));
 	if (esc == '\\')
-		return (ft_substr("\\", 0, 1));
+		return (ft_strdup("\\"));
 	if (esc == 's')
 		return (ft_strdup("minishell"));
 	if (ft_strchr("wW", esc))
@@ -96,14 +98,9 @@ char	*ft_expand_prompt(char *prompt)
 	while (prompt && prompt[backslash])
 	{
 		val = ft_escape_value(prompt[backslash + 1]);
-		if (val)
-		{
-			ft_str_insert(&prompt, val, backslash, 2);
-			backslash += ft_strlen(val);
-			free(val);
-		}
-		else
-			ft_str_insert(&prompt, "", backslash, 1);
+		ft_str_insert(&prompt, val, backslash, 1 + !!val);
+		backslash += ft_strplen(val);
+		free(val);
 		if (prompt)
 			backslash = ft_next_escape(prompt, backslash);
 	}

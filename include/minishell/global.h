@@ -39,36 +39,37 @@ enum e_errors
 	ERR_NOT_SET = -1,
 	ERR_MEM = 12,
 	ERR_TOKEN_SYNTAX = 258,
-	ERR_AMBIG_RED = 1,
+	ERR_AMBIG_RED = -2,
+	ERR_IS_DIR = 126,
 	ERR_CMD_NOT_FOUND = 127,
-	ERR_NO_FILE = -2
+	ERR_NO_FILE = -3
 };
 
 enum e_builtins
 {
-	B_NO,
-	B_ECHO,
-	B_CD,
-	B_PWD,
-	B_EXPORT,
-	B_UNSET,
-	B_ENV,
-	B_EXIT
+	B_NO = 0b00000000,
+	B_PARENT = 0b00000001,
+	B_EXIT = 0b00000011,
+	B_CD = 0b00000101,
+	B_EXPORT = 0b00001001,
+	B_UNSET = 0b00010001,
+	B_PWD = 0b00000010,
+	B_ECHO = 0b00000100,
+	B_ENV = 0b00001000,
 };
 
 /* ************************************************************************** */
 /*                              GLOBAL VARIABLE                               */
 /* ************************************************************************** */
 
-bool	verbose;
+char	verbose;
 char	g_ctrlc;
 
 /* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
-// signals.c
-void	ft_readline_handler(int sig);
+// minishell.c
 void	ft_sig_handler(int sig);
 
 // error.c

@@ -11,10 +11,20 @@
 # include "executor.h"
 
 /* ************************************************************************** */
+/*                                  DEFINES                                   */
+/* ************************************************************************** */
+
+# define GRAY_INCIDATOR "\002\001\e[30m\e[1m\u25b6\e[0m\002"
+# define RED_INCIDATOR "\002\001\e[1m\e[31m\u25b6\e[0m\002"
+# define GREEN_INCIDATOR "\002\001\e[1m\e[32m\u25b6\e[0m\002"
+
+/* ************************************************************************** */
 /*                                 FUNCTIONS                                  */
 /* ************************************************************************** */
 
-// minishell.c
+/* minishell.c
+int		main(int argc, char **argv);*/
+void	ft_readline_handler(int sig);
 
 // init_shell.c
 void	ft_init_shell(char *ms_path);
