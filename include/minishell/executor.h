@@ -15,9 +15,10 @@
 
 // execute.c
 int		ft_execute(int status, t_cmds *commands);
+// int		ft_pipeline(t_cmds *cmd);
 
 // child.c
-int		ft_create_child(t_cmds *cmd);
+// int		ft_create_child(t_cmds *cmd);
 
 // redirections.c
 void	ft_create_redirections(int status, t_cmds *cmd);

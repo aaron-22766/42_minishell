@@ -31,8 +31,8 @@ static int	ft_heredoc(unsigned char status, char *eof)
 			free(gnl);//remove
 		}//remove
 		signal(SIGINT, ft_sig_handler);
-		if (!line && rl_eof_found)
-			ft_printf("\e[A\e[K%s", prompt);
+		// if (!line && rl_eof_found)
+		// 	ft_printf("\e[A\e[K%s", prompt);
 		if (!line || !ft_strcmp(line, eof))
 			return (free(line), close(fd[1]), fd[0]);
 		if (ft_expand(&line, status, HEREDOC) != RMV)
