@@ -58,7 +58,7 @@ Here's a rough description about what our minishell does.
 
 * prompt is generated from the `PS1` environment variable, if it is set
 * it follows the bash rules for expansion
-* `[`, `]`, `a`, `e`, `n`, `r`, `\`, `s`, `w`, `W`, `u`, `h`, `H` are supported escape characters that get replaces if it is preceeded by a backslash
+* `[`, `]`, `a`, `e`, `n`, `r`, `\`, `s`, `w`, `W`, `u`, `h`, `H` are supported escape characters that are replaced if preceeded by a backslash
 * user, hostname and working directory are the most useful and require the corresponding environment variables to be set
 * the prompt also starts with a colored `▶` as a status indicator, it's grey by default, green on sucess and red if the execution failed
 
