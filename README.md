@@ -65,7 +65,7 @@ Here's a rough description about what our minishell does.
 ### Readline
 
 * we call `line = readline(prompt);`
-* if the line is NULL and the readline variable `rl_eor_found` is true, it means that ctrl-D was pressed and the shell should exit (after freeing everything or course)
+* if the line is NULL and the readline variable `rl_eor_found` is true, it means that ctrl-D was pressed and the shell should exit (after freeing everything of course)
 * then we add the line to the history if it isn't empty
 * we check the line for only whitespace characters, in which case we don't need to do anything (loop starts over) and the prompt status should turn grey
 
@@ -104,14 +104,14 @@ typedef struct s_tokens
 * the expander is integrated in the parser but the expansion happens before the main parser job anyway
 * all the tokens are analyzed and `WORD`s that are not `HEREDOC_EOF` are expanded
 * `~` is expanded to `HOME`
-* `~+` with optional path afterwards is expanded to `PWD`
-* `~-` with optional path afterwards is expanded to `OLDPWD`
+* `~+` is expanded to `PWD`
+* `~-` is expanded to `OLDPWD`
 * these tilde expansions are also applied to assignments if the tilde is preceeded immediately by the `=`
 * the following expansions are also used for the heredoc
 * `$` must be followed by a valid variable name - first digit must be alpha or underscore, following alnum or a number of allowed characters
 * also quotes and backslashes need to be handled correctly - var name is only until the first quote unless it's escaped by backlash (simplified example)
 * if a valid name is found, we look if there is a value (`getenv`) in the environment and it gets replaced if there is one
-* after this escaping backslashes are removed (`\\` is just `\`)
+* escaping backslashes are removed (`\\` is just `\`)
 * all the time quotes are really important to know what gets expanded - nothing between single quotes
 
 ### Parser
@@ -153,12 +153,12 @@ typedef struct s_cmds
 0b00001000 B_ENV
 ```
 * this makes it easy to check where the builtin needs to run (builtin & `B_PARENT` → should alter the current/parent process, no child needed)
-* `EXPORT`, `EXIT`, `CD` and `UNSET` only work if it's a sinle command, that's why we check for this in the beginning and run them if that's the case
+* `EXPORT`, `EXIT`, `CD` and `UNSET` only work if it's a single command, that's why we check for this in the beginning and run them if that's the case
 
 #### Redirections
 
 * loops over `io_red` tokens and sets `fd_in` and `fd_out` accordingly
-* `OUT_FILE` and `OUT_A_FILE` open/create a file in O_WRONLY with the file name in the `content` of the token an the right permissions
+* `OUT_FILE` and `OUT_A_FILE` open/create a file in O_WRONLY with the file name in the `content` of the token and the right permissions
 * `IN_FILE` opens the file in O_RDONLY
 * `HEREDOC` creates a pipe for an "invisible" temporary file, has another readline loop where it reads and expands the line and writes it to the pipe - `fd_in` is set to the pipes read end
 
